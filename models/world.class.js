@@ -12,40 +12,40 @@ class World {
     statusBar = [
         new StatusBar(
             [
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
             ], 20, 0, 100),
         new StatusBar(
             [
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
-                '../img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
+                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
             ], 20, 40, 100),
         new StatusBar(
             [
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png',
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
-                '../img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png',
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
+                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
             ], 20, 80, 0),
 
         new StatusBar(
             [
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-                '../img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
+                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
             ], 510, 0, 100),
 
         new StatusBar(
@@ -59,26 +59,37 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-
         this.update();
-
         this.setWorld();
-
+        this.characterInteractions();
+        this.updateAllHitboxes();
     }
 
     update() {
         this.draw();
+
+        this.character.updateHitbox();
         this.checkforHorizontalCollisions();
         this.character.applyGravity();
+        this.character.updateHitbox();
         this.checkforVerticalCollisions();
-        this.characterInteractions();
+
         // update wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
             self.update();
 
         });
-        
+
+    }
+
+    updateAllHitboxes() {
+        setInterval(() => {
+            this.level.enemies.forEach(enemy => {
+                console.log('update');
+                enemy.updateHitbox();
+            });
+        }, 100);
     }
 
     setWorld() {
@@ -89,13 +100,17 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        this.ctx.translate(this.camera_x, 0);
+        this.ctx.translate(this.camera_x / 20, 0);
 
         this.addEachToMap(this.level.backgroundObjects);
 
-        this.addEachToMap(this.level.enemies);
+        this.ctx.translate(-this.camera_x / 20, 0);
+
+        this.ctx.translate(this.camera_x, 0);
 
         this.addEachToMap(this.level.clouds);
+
+        this.addEachToMap(this.level.enemies);
 
         this.addEachToMap(this.level.tiles);
 
@@ -105,8 +120,8 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        this.addEachToMap(this.statusBar);
 
+        this.addEachToMap(this.statusBar);
 
     }
 
@@ -125,13 +140,12 @@ class World {
 
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx);
-        this.ctx.stroke();
-        mo.drawFrameHitbox(this.ctx);
-        this.ctx.stroke();
+
 
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
+        mo.drawFrameHitbox(this.ctx);
     }
 
 
@@ -149,20 +163,22 @@ class World {
     }
 
     characterInteractions() {
-        // setInterval(() => {
-        this.addThrowObject();
-        // }, 200);
-        // setInterval(() => {
-        this.checkCollisions();
-        // }, 50);
+        setInterval(() => {
+            this.addThrowObject();
+        }, 100);
+        setInterval(() => {
+            this.checkCollisions();
+        }, 50);
     }
 
     addThrowObject() {
         if (this.keyboard.THROW && this.character.bottles > 0) {
-            let bottle = new ThrowableObject(this.character.x + 25, this.character.y + 100);
+            let bottle = new ThrowableObject(this.character.x + 80, this.character.y + 70, this.character.otherDirection);
             this.throwableObjects.push(bottle);
-            this.character.bottles -= 20;
+            this.character.bottles -= 5;//20
             this.statusBar[1].setPercentage(this.character.bottles);
+            this.character.loadImage('img/03_character_youkai/Attack_3.png');
+            this.character.frameRate = 7;
         }
     }
 
@@ -177,30 +193,32 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy) && this.character.energy > 0) {
+            if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0) {
                 this.character.hit();
             }
         });
 
         this.throwableObjects.forEach(throwableObject => {
-            if (this.level.enemies[3].isColliding(throwableObject) && this.level.enemies[3].energy > 0) {
-                this.level.enemies[3].hit();
+            if (this.level.enemies[6].isCollidingHitbox(this.level.enemies[6].hitbox, throwableObject) && this.level.enemies[6].energy > 0) {
+                this.level.enemies[6].hit();
             }
         });
-        
+
 
     }
 
     checkforHorizontalCollisions() {
         this.level.tiles.forEach(tile => {
-            if (this.character.isColliding(tile)) {
+            if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
                 if (this.character.velocityX > 0) {
                     this.character.velocityX = 0;
-                    this.character.x = tile.x - this.character.width - 0.01;
+                    const offset = this.character.hitbox.x - this.character.x + this.character.hitbox.width;
+                    this.character.x = tile.x - offset - 0.01;
                 }
                 if (this.character.velocityX < 0) {
                     this.character.velocityX = 0;
-                    this.character.x = tile.x + tile.width + 0.01;
+                    const offset = this.character.hitbox.x - this.character.x;
+                    this.character.x = tile.x + tile.width - offset + 0.01;
                 }
             }
         });
@@ -208,18 +226,22 @@ class World {
 
     checkforVerticalCollisions() {
         this.level.tiles.forEach(tile => {
-            if (this.character.isColliding(tile)) {
+            if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
                 if (this.character.velocityY > 0) {
                     this.character.velocityY = 0;
-                    this.character.y = tile.y - this.character.height - 0.01;
+                    const offset = this.character.hitbox.y - this.character.y + this.character.hitbox.height;
+                    this.character.y = tile.y - offset - 0.01;
                 }
                 if (this.character.velocityY < 0) {
                     this.character.velocityY = 0;
-                    this.character.y = tile.y + tile.height + 0.01;
+                    const offset = this.character.y - this.character.hitbox.y;
+                    this.character.y = tile.y + tile.height + offset + 0.01;
                 }
             }
         });
     }
+
+
 
 
 }

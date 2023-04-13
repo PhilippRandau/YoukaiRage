@@ -2,15 +2,21 @@ class DrawableObject {
     x = 100;
     y = 180;
     img;
-    height = 60;
-    width = 50;
+    imgScale = 1;
     imageCache = [];
     currentImage = 0;
-    
-    
-    //loadImage('img/test.png');
+    frameRate = 1;
+    currentFrame = 0;
+    frameBuffer = 30;
+    elapsedFrames = 0;
+    offsetCenterIMG = 0;
+
     loadImage(path) {
         this.img = new Image();
+        this.img.onload = () => {
+            this.width = (this.img.width / this.frameRate) * this.imgScale;
+            this.height = this.img.height * this.imgScale;
+        }
         this.img.src = path;
     }
 
@@ -27,28 +33,66 @@ class DrawableObject {
 
     }
 
+
+    cropbox() {
+        return {
+            x: this.currentFrame * this.img.width / this.frameRate,
+            y: 0,
+            width: this.img.width / this.frameRate,
+            height: this.img.height,
+        }
+    }
+
+
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        const cropbox = this.cropbox();
+        ctx.drawImage(
+            this.img,
+            cropbox.x,
+            cropbox.y,
+            cropbox.width,
+            cropbox.height,
+            this.x + this.offsetCenterIMG, this.y,
+            this.width,
+            this.height);
+
+        this.updateFrames();
+    }
+
+    updateFrames() {
+        this.elapsedFrames++;
+        if (this.elapsedFrames % this.frameBuffer === 0) {
+            if (this.currentFrame < this.frameRate - 1) {
+                this.currentFrame++;
+            } else {
+                this.currentFrame = 0;
+            }
+        }
     }
 
 
     drawFrame(ctx) {
-
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Tile) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Tile) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'blue';
             ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
         }
     }
+
 
     drawFrameHitbox(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Tile) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss) {
             ctx.beginPath();
-            ctx.lineWidth = '1';
+            ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';
-            ctx.rect(this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.right, this.height - this.offset.bottom);
+            ctx.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
+            ctx.stroke();
         }
 
     }
+
+
 }
+

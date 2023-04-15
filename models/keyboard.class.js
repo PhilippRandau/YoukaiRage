@@ -3,7 +3,7 @@ class Keyboard {
    RIGHT = false;
    DOWN = false;
    UP = false;
-   THROW = false;
+   CHARGE = false;
     
     constructor() {
         

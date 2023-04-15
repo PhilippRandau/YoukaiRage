@@ -86,7 +86,6 @@ class World {
     updateAllHitboxes() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
-                console.log('update');
                 enemy.updateHitbox();
             });
         }, 100);
@@ -163,26 +162,26 @@ class World {
     }
 
     characterInteractions() {
-        setInterval(() => {
-            this.addThrowObject();
-        }, 100);
+        // setInterval(() => {
+        //     this.addChargeObject();
+        // }, 100);
         setInterval(() => {
             this.checkCollisions();
         }, 50);
     }
 
-    addThrowObject() {
-        if (this.keyboard.THROW && this.character.bottles > 0) {
-            let bottle = new ThrowableObject(this.character.x + 80, this.character.y + 70, this.character.otherDirection);
-            this.throwableObjects.push(bottle);
-            this.character.bottles -= 5;//20
-            this.statusBar[1].setPercentage(this.character.bottles);
-            this.character.loadImage('img/03_character_youkai/Attack_3.png');
-            this.character.frameRate = 7;
-        }
-    }
+    // addChargeObject() {
+    //     if (this.keyboard.CHARGE && this.character.charges > 0) {
+    //         setTimeout(() => {
+    //             let charges = new ThrowableObject(this.character.x + 80, this.character.y + 70, this.character.otherDirection);
+    //             this.throwableObjects.push(charges);
+    //             this.statusBar[1].setPercentage(this.character.charges);
+    //         }, 240);
+    //         this.character.charges -= 5;//20
+    //     }
+    // }
 
-    checkThrowObject() {
+    checkChargeObject() {
         this.throwableObjects.forEach((throwableObject, index) => {
             console.log(throwableObject);
             if (throwableObject.y > 1000) {

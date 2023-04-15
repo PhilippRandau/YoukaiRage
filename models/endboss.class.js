@@ -4,10 +4,10 @@ class Endboss extends MovableObject {
     imgScale = 1.5;
     y = 255;
     x = 400;//2200
-    intervalAnimation; 
+    intervalAnimation;
     offsetCenterIMG = 27;
     chicken_sound = new Audio('audio/chicken.mp3');
-
+    intervalWalk;
     hitbox = {
         x: this.x,
         y: this.y,
@@ -27,38 +27,40 @@ class Endboss extends MovableObject {
         super().loadImage('img/04_enemies/Endboss/Idle.png');
         this.frameRate = 4;
         // this.x = 300 + Math.random() * 500;
-        // this.walk();
-        this.speed = 0.8;
+        this.walk();
+        this.velocityX = 0.8;
         this.animate();
     }
 
     walk() {
-        let intervalWalk;
+
         setInterval(() => {
-            clearInterval(intervalWalk);
-            let random = Math.random();
-            if (random < 0.35) {
-                this.otherDirection = false;
-                this.loadImage('img/04_enemies/Endboss/Walk.png');
-                this.frameRate = 4;
-                intervalWalk = setInterval(() => {
-                    this.x += this.velocityX;
-                }, 1000 / 120);
-                // clearInterval(this.intervalAnimation);
-                // this.animate();
-            } else if (random > 0.65) {
-                this.otherDirection = true;
-                this.loadImage('img/04_enemies/Endboss/Walk.png');
-                this.frameRate = 4;
-                intervalWalk = setInterval(() => {
-                    this.x -= this.velocityX;
-                }, 1000 / 120);
-                // clearInterval(this.intervalAnimation);
-                // this.animate();
-            }else if(random < 0.65 && random > 0.35){
-                this.loadImage('img/04_enemies/Endboss/Idle.png');
-                this.frameRate = 4;
-                // clearInterval(this.intervalAnimation);
+            clearInterval(this.intervalWalk);
+            if (!this.isDead()) {
+                let random = Math.random();
+                if (random < 0.35) {
+                    this.otherDirection = false;
+                    this.loadImage('img/04_enemies/Endboss/Walk.png');
+                    this.frameRate = 4;
+                    this.intervalWalk = setInterval(() => {
+                        this.x += this.velocityX;
+                    }, 1000 / 120);
+                    // clearInterval(this.intervalAnimation);
+                    // this.animate();
+                } else if (random > 0.65) {
+                    this.otherDirection = true;
+                    this.loadImage('img/04_enemies/Endboss/Walk.png');
+                    this.frameRate = 4;
+                    this.intervalWalk = setInterval(() => {
+                        this.x -= this.velocityX;
+                    }, 1000 / 120);
+                    // clearInterval(this.intervalAnimation);
+                    // this.animate();
+                } else if (random < 0.65 && random > 0.35) {
+                    this.loadImage('img/04_enemies/Endboss/Idle.png');
+                    this.frameRate = 4;
+                    // clearInterval(this.intervalAnimation);
+                }
             }
             // this.chicken_sound.play();
         }, 2000);
@@ -67,16 +69,14 @@ class Endboss extends MovableObject {
     animate() {
         this.intervalAnimation = setInterval(() => {
             if (this.isDead()) {
-                this.loadImage('img/04_enemies/Endboss/Death.png');
-                this.frameRate = 6;
+                this.switchSprite('img/04_enemies/Endboss/Death.png', 6, 30);
+                // this.velocityX = 0;
+                clearInterval(this.intervalWalk);
+            } else if (this.isHurt()) {
+                this.switchSprite('img/04_enemies/Endboss/Hurt.png', 2, 30);
 
-            }else if (this.isHurt()){
-                this.loadImage('img/04_enemies/Endboss/Hurt.png');
-                this.frameRate = 2;
-
-            }else {
-                this.loadImage('img/04_enemies/Endboss/Idle.png');
-                this.frameRate = 4;
+            } else {
+                this.switchSprite('img/04_enemies/Endboss/Idle.png', 4, 30);
             }
         }, 150);
     }

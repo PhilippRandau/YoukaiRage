@@ -25,7 +25,6 @@ class MovableObject extends DrawableObject {
     world;
 
     applyGravity() {
-
         this.y += this.velocityY;
         this.velocityY += this.gravity;
         if (this.y + this.height + this.velocityY < canvas.height) {
@@ -38,12 +37,7 @@ class MovableObject extends DrawableObject {
 
 
     isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return true;
-        } else {
-            return this.y < 180;
-        }
-
+        return this.velocityY !== 0;
     }
 
 
@@ -107,11 +101,22 @@ class MovableObject extends DrawableObject {
         return this.energy == 0;
     }
 
+    switchSprite(img, frameRate, frameBuffer) {
+        // if (world.keyboard.LEFT || world.keyboard.RIGHT || world.keyboard.SPACE || world.keyboard.CHARGE) {
+        //     this.currentFrame = 0;
+        // }
+        
+        this.loadImage(img);
+        this.frameRate = frameRate;
+        this.frameBuffer = frameBuffer;
+    }
+
+
     updateHitbox() {
         // if (this.otherDirection) {
         //     this.hitbox.x = this.x + (this.width / 2) + (this.width / 2) - this.offset.x - this.hitbox.width;
         // } else {
-            this.hitbox.x = this.x + this.offset.x;
+        this.hitbox.x = this.x + this.offset.x;
         // }
         this.hitbox.y = this.y + this.offset.y;
         this.hitbox.width = this.offset.width;

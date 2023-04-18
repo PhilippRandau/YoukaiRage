@@ -18,7 +18,7 @@ class World {
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
-            ], 20, 0, 100),
+            ], 20, 40, 640, 50, 100, 'static'),
         new StatusBar(
             [
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
@@ -27,7 +27,7 @@ class World {
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
-            ], 20, 40, 100),
+            ], 20, 80, 640, 50, 100, 'static'),
         new StatusBar(
             [
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
@@ -36,22 +36,22 @@ class World {
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
-            ], 20, 80, 0),
+            ], 20, 120, 640, 50, 100, 'static'),
 
         new StatusBar(
             [
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
-            ], 510, 0, 100),
-
+                'img/07_statusbars/Bar 1/LoadingBar_1_Background.png'
+            ], 210, 8, 320, 30, 0, 'static'),
         new StatusBar(
             [
-                'img/7_statusbars/3_icons/icon_health_endboss.png'
-            ], 503, 8, 0)
+                'img/07_statusbars/Bar 1/LoadingBar_1_Fill_Red.png'
+            ], 218, 15, 305, 16, 100, 'adjustable')
+
+       
+    ];
+    statusText = [
+        new StatusText(240, 45, 640, 50, 'Boss'),
+        // new StatusText(30, 8, 640, 100, 'Test') // x, y, width, height, startStatuslevel
     ];
     throwableObjects = [];
 
@@ -67,7 +67,6 @@ class World {
 
     update() {
         this.draw();
-
         this.character.updateHitbox();
         this.checkforHorizontalCollisions();
         this.character.applyGravity();
@@ -119,9 +118,20 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
+        this.addStatusTexts(this.statusText);
 
         this.addEachToMap(this.statusBar);
 
+    }
+
+    addStatusTexts(objects){
+        objects.forEach(object => {
+            this.addStatusText(object);
+        });
+    }
+
+    addStatusText(object){
+        object.drawText(this.ctx);
     }
 
 
@@ -192,7 +202,10 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0) {
+            if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && this.character.isFalling() && enemy.energy > 0) {
+                this.character.enemieHit = true;
+                enemy.hit();
+            } else if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0 && enemy.energy > 0) {
                 this.character.hit();
             }
         });

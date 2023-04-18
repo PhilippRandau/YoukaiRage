@@ -27,7 +27,7 @@ class Endboss extends MovableObject {
         super().loadImage('img/04_enemies/Endboss/Idle.png');
         this.frameRate = 4;
         // this.x = 300 + Math.random() * 500;
-        this.walk();
+        // this.walk();
         this.velocityX = 0.8;
         this.animate();
     }

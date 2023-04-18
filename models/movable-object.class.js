@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
     gravity = 0.02;
     energy = 100;
     lastHit = 0;
+    previousImg;
 
     hitbox = {
         x: this.x,
@@ -84,11 +85,12 @@ class MovableObject extends DrawableObject {
         if (this.energy > 0) {
             this.lastHit = new Date().getTime();
         }
-        this.energy -= 10;
+        this.energy -= 20;
         if (this instanceof Character) {
             world.statusBar[0].setPercentage(this.energy);
         } else if (this instanceof Endboss) {
-            world.statusBar[3].setPercentage(this.energy);
+            world.statusBar[4].setPercentage(this.energy);
+            world.statusText[0].setPercentage(this.energy);
         }
     }
 
@@ -98,17 +100,17 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy === 0;
     }
 
     switchSprite(img, frameRate, frameBuffer) {
-        // if (world.keyboard.LEFT || world.keyboard.RIGHT || world.keyboard.SPACE || world.keyboard.CHARGE) {
-        //     this.currentFrame = 0;
-        // }
-        
+        if (img !== this.previousImg) {
+            this.currentFrame = 0;
+        }
         this.loadImage(img);
         this.frameRate = frameRate;
         this.frameBuffer = frameBuffer;
+        this.previousImg = img;
     }
 
 

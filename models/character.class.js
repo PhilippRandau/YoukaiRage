@@ -5,6 +5,7 @@ class Character extends MovableObject {
     velocityX = 4;
     offsetCenterIMG = 2;
     lastCall;
+    enemieHit;
     walking_sound = new Audio('audio/walk.mp3');
     world;
     constructor() {
@@ -20,18 +21,22 @@ class Character extends MovableObject {
                 this.switchSprite('img/03_character_youkai/Dead.png', 4, 30);
             } else if (this.isHurt()) {
                 this.switchSprite('img/03_character_youkai/Hurt.png', 3, 30);
-            } else if (this.world.keyboard.CHARGE) {
-                this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 50);
+                this.lastCall = new Date().getTime();
+            } else if (this.world.keyboard.CHARGE && this.charges > 0) {
+                this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 30);
                 this.lastCall = new Date().getTime();
             } else if (this.isFalling()) {
                 this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
+                this.lastCall = new Date().getTime();
             } else if (this.isJumping()) {
                 this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
             } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && (!this.isJumping() && !this.isFalling())) {
                 this.switchSprite('img/03_character_youkai/Walk.png', 5, 30);
+                this.lastCall = new Date().getTime();
             } else if (this.isBored()) {
                 this.switchSprite('img/03_character_youkai/Idle.png', 5, 30);
             }
+
         }, 100);
     }
 
@@ -52,7 +57,9 @@ class Character extends MovableObject {
     interactions() {
         this.walk();
         this.charge();
-        this.jump();
+        setInterval(() => {
+            this.jump();
+        }, 1000 / 144);
     }
 
     walk() {
@@ -86,16 +93,16 @@ class Character extends MovableObject {
     }
 
     jump() {
-        setInterval(() => {
-            if (this.world.keyboard.UP && !this.isAboveGround()) {
-                this.velocityY = -3;
-            }
-        }, 1000 / 144);
+        if ((this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) || this.enemieHit) {
+            this.velocityY = -4;
+            this.enemieHit = false;
+        }
+
     }
 
     charge() {
         setInterval(() => {
-            if (this.world.keyboard.CHARGE && this.charges > 0) {
+            if (this.world.keyboard.CHARGE && this.charges > 0 && !this.isDead()) {
                 setTimeout(() => {
                     let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
                     this.world.throwableObjects.push(charges);

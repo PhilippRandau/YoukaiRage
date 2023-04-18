@@ -2,7 +2,7 @@ class Worker extends MovableObject {
     imgScale = 1.3;
     y = 275;
     intervalAnimation;
-    energy = 100;
+    energy = 20;
     velocityX = 0.6;
     offsetCenterIMG = 33;
 

@@ -52,13 +52,14 @@ class DrawableObject {
             cropbox.y,
             cropbox.width,
             cropbox.height,
-            this.x + this.offsetCenterIMG, this.y,
+            this.x + this.offsetCenterIMG,
+            this.y,
             this.width,
             this.height);
 
         this.updateFrames();
     }
-
+ 
     updateFrames() {
         this.elapsedFrames++;
         if (this.elapsedFrames % this.frameBuffer === 0) {

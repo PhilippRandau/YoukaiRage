@@ -4,7 +4,7 @@ class MechWorker extends MovableObject {
     imgScale = 1.3;
     y = 275;
     intervalAnimation;
-    energy = 100;
+    energy = 40;
     velocityX = 0.6;
 
     offsetCenterIMG = 25;

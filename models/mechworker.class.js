@@ -16,17 +16,39 @@ class MechWorker extends MovableObject {
         height: 70,
     }
 
+    GHOST_IMAGES = [
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost1.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost2.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost3.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost4.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost5.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost6.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost7.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost8.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost9.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost10.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost11.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost12.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost13.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost14.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost15.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost16.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost17.png',
+        'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost18.png',
+    ];
+
     chicken_sound = new Audio('audio/chicken.mp3');
 
-    constructor() {
+    constructor(enemieID) {
 
         super().loadImage('img/04_enemies/MechWorker/Idle.png');
         this.frameRate = 4;
-        // this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.GHOST_IMAGES);
         this.x = 700 + Math.random() * 500;
         // this.walk();
         // this.velocityX = this.velocityX + Math.random() * 0.25
-        // this.animate();
+        this.enemieID = enemieID;
+        this.animate();
     }
 
     walk() {
@@ -41,7 +63,7 @@ class MechWorker extends MovableObject {
                 intervalWalk = setInterval(() => {
                     this.x += this.velocityX;
                 }, 1000 / 120);
-                // clearInterval(this.intervalAnimation);
+                clearInterval(this.intervalAnimation);
                 // this.animate();
             } else if (random > 0.65) {
                 this.otherDirection = true;
@@ -50,28 +72,36 @@ class MechWorker extends MovableObject {
                 intervalWalk = setInterval(() => {
                     this.x -= this.velocityX;
                 }, 1000 / 120);
-                // clearInterval(this.intervalAnimation);
+                clearInterval(this.intervalAnimation);
                 // this.animate();
             } else if (random < 0.65 && random > 0.35) {
                 this.loadImage('img/04_enemies/MechWorker/Idle.png');
                 this.frameRate = 4;
-                // clearInterval(this.intervalAnimation);
+                clearInterval(this.intervalAnimation);
             }
             // this.chicken_sound.play();
         }, 2000);
     }
 
-    // animate() {
-    //     this.intervalAnimation = setInterval(() => {
-    //         this.playAnimation(this.IMAGES_WALKING)
-    //     }, 80);
-    // }
+    animate() {
+        this.intervalAnimation = setInterval(() => {
+            if (this.isDead()) {
+                this.playAnimation(this.GHOST_IMAGES);
+                this.frameRate = 1;
+                clearInterval(this.intervalWalk);
+                this.offsetCenterIMG = -30;
+                this.y = 230;
+                    if (this.currentImage > 18) {
+                        clearInterval(this.intervalAnimation);
+                        delete world.level.enemies[this.enemieID];
+                    }
+            }else if (this.isHurt()) {
+                this.switchSprite('img/04_enemies/MechWorker/Hurt.png', 2, 30);
 
-    // updateHitbox(){
-    //     this.hitbox.x = this.x + 20;
-    //     this.hitbox.y = this.y + 55;
-    //     this.hitbox.width = 35;
-    //     this.hitbox.height = 70;
-    // }
+            } else {
+                this.switchSprite('img/04_enemies/MechWorker/Idle.png', 4, 30);
+            }
+        }, 100);
+    }
 
 }

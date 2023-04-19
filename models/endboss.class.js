@@ -23,17 +23,18 @@ class Endboss extends MovableObject {
     }
 
 
-    constructor() {
+    constructor(enemieID) {
         super().loadImage('img/04_enemies/Endboss/Idle.png');
         this.frameRate = 4;
         // this.x = 300 + Math.random() * 500;
         // this.walk();
+        this.enemieID = enemieID;
         this.velocityX = 0.8;
         this.animate();
+        this.otherDirection = true;
     }
 
     walk() {
-
         setInterval(() => {
             clearInterval(this.intervalWalk);
             if (!this.isDead()) {
@@ -71,7 +72,12 @@ class Endboss extends MovableObject {
             if (this.isDead()) {
                 this.switchSprite('img/04_enemies/Endboss/Death.png', 6, 30);
                 // this.velocityX = 0;
-                clearInterval(this.intervalWalk);
+                // clearInterval(this.intervalWalk);
+                if (this.currentFrame == 4) {
+                    clearInterval(this.intervalAnimation);
+                    this.switchSprite('img/04_enemies/Endboss/Death.png', 0, 30);
+                    
+                }
             } else if (this.isHurt()) {
                 this.switchSprite('img/04_enemies/Endboss/Hurt.png', 2, 30);
 

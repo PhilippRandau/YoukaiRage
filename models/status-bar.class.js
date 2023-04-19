@@ -45,7 +45,6 @@ class StatusBar extends DrawableObject {
             this.height);
 
         this.updateFrames();
-        // console.log(this.img, this.statusBarFill())
     }
 
     statusBarFillCropbox() {

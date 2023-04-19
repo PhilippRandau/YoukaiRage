@@ -1,29 +1,31 @@
 class StatusText extends DrawableObject {
     y = 0;
+    textColor;
 
-
-    constructor(x, y, width, height, text) {
+    constructor(xName, yName, width, height, text, xNumber, yNumber, percentage, textColor) {
         super();
-        this.x = x;
-        this.y = y;
+        this.xName = xName;
+        this.yName = yName;
         this.width = width;
         this.height = height;
         this.text = text
-        this.setPercentage(100);
+        this.xNumber = xNumber;
+        this.yNumber = yNumber;
+        this.percentage = percentage;
+        this.textColor = textColor;
         
     }
 
     drawText(ctx){
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "white";
-        ctx.fillText(this.text, this.x, this.y);
+        ctx.font = "24px PixelGothic";
 
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "white";
-        ctx.fillText(this.percentage + ' / 100', 440, 45);
+        ctx.fillStyle = this.textColor;
+        ctx.fillText(this.text, this.xName, this.yName);
+
+        ctx.fillStyle = this.textColor;
+        ctx.fillText(this.percentage + ' | 100', this.xNumber, this.yNumber);
         
     }
-
 
     setPercentage(percentage) {
         this.percentage = percentage;

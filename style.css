@@ -7,3 +7,13 @@ body{
 canvas{
     background-color: black;
 }
+
+/* @font-face {
+    font-family: "IskoolaPota";
+    src: url("fonts/Iskoola Pota - Regular.ttf");
+  } */
+
+  @font-face {
+    font-family: "PixelGothic";
+    src: url("fonts/Straight pixel gothic.otf");
+  }

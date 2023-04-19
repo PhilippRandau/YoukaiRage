@@ -18,7 +18,7 @@ class World {
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
                 'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
-            ], 20, 40, 640, 50, 100, 'static'),
+            ], 1000, 40, 640, 50, 100, 'static'),
         new StatusBar(
             [
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
@@ -27,7 +27,7 @@ class World {
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
                 'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
-            ], 20, 80, 640, 50, 100, 'static'),
+            ], 1000, 80, 640, 50, 100, 'static'),
         new StatusBar(
             [
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
@@ -36,7 +36,7 @@ class World {
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
                 'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
-            ], 20, 120, 640, 50, 100, 'static'),
+            ], 1000, 120, 640, 50, 100, 'static'),
 
         new StatusBar(
             [
@@ -50,7 +50,11 @@ class World {
        
     ];
     statusText = [
-        new StatusText(240, 45, 640, 50, 'Boss'),
+        
+        new StatusText(30, 31, 50, 50, 'Health', 90, 31, 100, 'lightgreen'),
+        new StatusText(30, 61, 640, 50, 'Charge', 90, 61, 100, 'red'),
+        new StatusText(30, 91, 640, 50, 'Points', 90, 91, 100, 'yellow'),
+        new StatusText(240, 50, 640, 50, 'Boss Health', 440, 50, 100, 'white'),
         // new StatusText(30, 8, 640, 100, 'Test') // x, y, width, height, startStatuslevel
     ];
     throwableObjects = [];
@@ -148,13 +152,13 @@ class World {
         }
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
 
 
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
-        mo.drawFrameHitbox(this.ctx);
+        // mo.drawFrameHitbox(this.ctx);
     }
 
 

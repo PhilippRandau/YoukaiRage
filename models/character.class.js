@@ -40,7 +40,6 @@ class Character extends MovableObject {
         }, 100);
     }
 
-
     isBored() {
         let timepassed = new Date().getTime() - this.lastCall;
         return timepassed > 800;
@@ -106,7 +105,8 @@ class Character extends MovableObject {
                 setTimeout(() => {
                     let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
                     this.world.throwableObjects.push(charges);
-                    this.world.statusBar[1].setPercentage(this.charges);
+                    // this.world.statusBar[1].setPercentage(this.charges);
+                    this.world.statusText[1].setPercentage(this.charges);
                 }, 300);
                 this.charges -= 5;//20
             }

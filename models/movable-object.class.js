@@ -1,4 +1,5 @@
 class MovableObject extends DrawableObject {
+    enemieID;
     // speed = 0.2;
     otherDirection = false;
     direction = '';
@@ -87,10 +88,11 @@ class MovableObject extends DrawableObject {
         }
         this.energy -= 20;
         if (this instanceof Character) {
-            world.statusBar[0].setPercentage(this.energy);
+            // world.statusBar[0].setPercentage(this.energy);
+            world.statusText[0].setPercentage(this.energy);
         } else if (this instanceof Endboss) {
             world.statusBar[4].setPercentage(this.energy);
-            world.statusText[0].setPercentage(this.energy);
+            world.statusText[3].setPercentage(this.energy);
         }
     }
 

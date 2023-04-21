@@ -31,7 +31,6 @@ class MovableObject extends DrawableObject {
         this.velocityY += this.gravity;
         if (this.y + this.height + this.velocityY < canvas.height) {
             this.velocityY += this.gravity;
-
         } else {
             this.velocityY = 0;
         }
@@ -83,17 +82,31 @@ class MovableObject extends DrawableObject {
     // }
 
     hit() {
-        if (this.energy > 0) {
-            this.lastHit = new Date().getTime();
-        }
-        this.energy -= 20;
+        // if (this.energy > 0) {
+        this.lastHit = new Date().getTime();
+        // }
         if (this instanceof Character) {
-            // world.statusBar[0].setPercentage(this.energy);
+            this.energy -= 20;
             world.statusText[0].setPercentage(this.energy);
-        } else if (this instanceof Endboss) {
+            if (world.character.points > 0) {
+                this.addPoints(-20);
+            }
+        }
+        if (this instanceof Worker || this instanceof MechWorker) {
+            this.energy -= 20;
+            this.addPoints(20);
+        }
+        if (this instanceof Endboss) {
+            this.energy -= 10;
             world.statusBar[4].setPercentage(this.energy);
             world.statusText[3].setPercentage(this.energy);
+            this.addPoints(50);
         }
+    }
+
+    addPoints(amount) {
+        world.character.points += amount;
+        world.statusText[2].setPercentage(world.character.points);
     }
 
     isHurt() {

@@ -1,4 +1,4 @@
-class Cloud extends MovableObject {
+class Asteroids extends MovableObject {
     y = 0;
     width = 360;
     height = 240;
@@ -6,11 +6,8 @@ class Cloud extends MovableObject {
     
     constructor(imgPath, x) {
         super().loadImage(imgPath);
-
         this.x = x
         this.animate();
-
-
     }
 
     animate(){

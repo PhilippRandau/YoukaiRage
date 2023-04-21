@@ -3,7 +3,7 @@ class Endboss extends MovableObject {
     // width = 320;
     imgScale = 1.5;
     y = 255;
-    x = 400;//2200
+    x = 4000;//2200
     intervalAnimation;
     offsetCenterIMG = 27;
     chicken_sound = new Audio('audio/chicken.mp3');
@@ -73,10 +73,9 @@ class Endboss extends MovableObject {
                 this.switchSprite('img/04_enemies/Endboss/Death.png', 6, 30);
                 // this.velocityX = 0;
                 // clearInterval(this.intervalWalk);
-                if (this.currentFrame == 4) {
+                if (this.currentFrame >= 4) {
                     clearInterval(this.intervalAnimation);
                     this.switchSprite('img/04_enemies/Endboss/Death.png', 0, 30);
-                    
                 }
             } else if (this.isHurt()) {
                 this.switchSprite('img/04_enemies/Endboss/Hurt.png', 2, 30);

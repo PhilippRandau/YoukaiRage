@@ -31,13 +31,16 @@ const level1 = new Level(
         new Endboss(6),
     ],
     [
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 0),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*2),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*3),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*4),
-        new Cloud('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*5),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 0),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*2),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*3),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*4),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*5),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*6),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*7),
+       
     ],
     [
         new Tile('img/02_Tiles/green tiles/Tile_11.png', 0, 400),
@@ -69,5 +72,8 @@ const level1 = new Level(
         new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*26, 400),
         
 
+    ],
+    [
+        // new Rat(),
     ]
 );

@@ -2,8 +2,9 @@ class World {
     backgroundObjects = level1.backgroundObjects;
     character = new Character();
     enemies = level1.enemies;
-    clouds = level1.clouds;
+    clouds = level1.asteroids;
     tiles = level1.tiles;
+    creatures = level1.creatures;
     level = level1;
     canvas;
     ctx;
@@ -47,15 +48,13 @@ class World {
                 'img/07_statusbars/Bar 1/LoadingBar_1_Fill_Red.png'
             ], 218, 15, 305, 16, 100, 'adjustable')
 
-       
+
     ];
     statusText = [
-        
-        new StatusText(30, 31, 50, 50, 'Health', 90, 31, 100, 'lightgreen'),
-        new StatusText(30, 61, 640, 50, 'Charge', 90, 61, 100, 'red'),
-        new StatusText(30, 91, 640, 50, 'Points', 90, 91, 100, 'yellow'),
-        new StatusText(240, 50, 640, 50, 'Boss Health', 440, 50, 100, 'white'),
-        // new StatusText(30, 8, 640, 100, 'Test') // x, y, width, height, startStatuslevel
+        new StatusText(30, 35, 50, 50, 'Health', 100, 35, 100, 'lightgreen'),
+        new StatusText(30, 65, 640, 50, 'Charge', 100, 65, 100, 'red'),
+        new StatusText(550, 45, 640, 50, 'Points', 660, 45, 0, 'yellow'),
+        new StatusText(240, 52, 640, 50, 'Boss Health', 435, 52, 100, 'white'),
     ];
     throwableObjects = [];
 
@@ -110,7 +109,7 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addEachToMap(this.level.clouds);
+        this.addEachToMap(this.level.asteroids);
 
         this.addEachToMap(this.level.enemies);
 
@@ -128,13 +127,13 @@ class World {
 
     }
 
-    addStatusTexts(objects){
+    addStatusTexts(objects) {
         objects.forEach(object => {
             this.addStatusText(object);
         });
     }
 
-    addStatusText(object){
+    addStatusText(object) {
         object.drawText(this.ctx);
     }
 
@@ -176,52 +175,40 @@ class World {
     }
 
     characterInteractions() {
-        // setInterval(() => {
-        //     this.addChargeObject();
-        // }, 100);
         setInterval(() => {
             this.checkCollisions();
-        }, 50);
+        }, 30);
     }
 
-    // addChargeObject() {
-    //     if (this.keyboard.CHARGE && this.character.charges > 0) {
-    //         setTimeout(() => {
-    //             let charges = new ThrowableObject(this.character.x + 80, this.character.y + 70, this.character.otherDirection);
-    //             this.throwableObjects.push(charges);
-    //             this.statusBar[1].setPercentage(this.character.charges);
-    //         }, 240);
-    //         this.character.charges -= 5;//20
-    //     }
-    // }
-
-    checkChargeObject() {
-        this.throwableObjects.forEach((throwableObject, index) => {
-            console.log(throwableObject);
-            if (throwableObject.y > 1000) {
-                this.throwableObjects.splice(index, 1);
-            }
-        })
-    }
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && this.character.isFalling() && enemy.energy > 0) {
+            if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && !this.character.isDead() && this.character.isFalling() && enemy.energy > 0) {
                 this.character.enemieHit = true;
                 enemy.hit();
             } else if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0 && enemy.energy > 0) {
-                this.character.hit();
+                if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
+                    this.character.hit();
+                    this.character.lastHitTime = Date.now();
+                }
             }
         });
 
-        this.throwableObjects.forEach(throwableObject => {
-            if (this.level.enemies[6].isCollidingHitbox(this.level.enemies[6].hitbox, throwableObject) && this.level.enemies[6].energy > 0) {
+
+        this.throwableObjects.forEach((throwableObject) => {
+            if (this.level.enemies[6].isCollidingHitbox(this.level.enemies[6].hitbox, throwableObject) && this.level.enemies[6].energy > 0 && !throwableObject.hit) {
                 this.level.enemies[6].hit();
+                throwableObject.hit = true;
             }
         });
 
 
     }
+
+    isTimePassed(time) {
+        return Date.now() - this.character.lastHitTime > time;
+    }
+
 
     checkforHorizontalCollisions() {
         this.level.tiles.forEach(tile => {

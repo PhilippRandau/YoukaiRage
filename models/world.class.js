@@ -95,7 +95,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        this.level.enemies[6].world = this;
+        this.level.enemies[10].world = this;
     }
 
     draw() {
@@ -206,8 +206,8 @@ class World {
 
 
         this.throwableObjects.forEach((throwableObject) => {
-            if (this.level.enemies[6].isCollidingHitbox(this.level.enemies[6].hitbox, throwableObject) && this.level.enemies[6].energy > 0 && !throwableObject.hit) {
-                this.level.enemies[6].hit();
+            if (this.level.enemies[10].isCollidingHitbox(this.level.enemies[10].hitbox, throwableObject) && this.level.enemies[10].energy > 0 && !throwableObject.hit) {
+                this.level.enemies[10].hit();
                 throwableObject.hit = true;
             }
         });

@@ -39,12 +39,14 @@ class MechWorker extends MovableObject {
 
     chicken_sound = new Audio('audio/chicken.mp3');
 
-    constructor(enemieID) {
+    constructor(enemieID, x, y, otherDirection) {
 
         super().loadImage('img/04_enemies/MechWorker/Idle.png');
         this.frameRate = 4;
         this.loadImages(this.GHOST_IMAGES);
-        this.x = 700 + Math.random() * 500;
+        this.x = x;
+        this.y = y;
+        this.otherDirection = otherDirection;
         // this.walk();
         // this.velocityX = this.velocityX + Math.random() * 0.25
         this.enemieID = enemieID;
@@ -84,13 +86,14 @@ class MechWorker extends MovableObject {
     }
 
     animate() {
+        let ghostY = this.y - 35;
         this.intervalAnimation = setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.GHOST_IMAGES);
                 this.frameRate = 1;
                 clearInterval(this.intervalWalk);
                 this.offsetCenterIMG = -30;
-                this.y = 230;
+                this.y = ghostY;
                     if (this.currentImage > 18) {
                         clearInterval(this.intervalAnimation);
                         delete world.level.enemies[this.enemieID];

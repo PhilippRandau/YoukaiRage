@@ -24,11 +24,14 @@ class MovableObject extends DrawableObject {
         height: 0,
     }
 
-    world;
+
 
     applyGravity() {
         this.y += this.velocityY;
         this.velocityY += this.gravity;
+        if (this.hitbox.y < 0) {
+            this.velocityY = 0.05;
+        }
         if (this.y + this.height + this.velocityY < canvas.height) {
             this.velocityY += this.gravity;
         } else {
@@ -42,14 +45,6 @@ class MovableObject extends DrawableObject {
     }
 
 
-    moveLeft() {
-        setInterval(() => {
-            this.x -= this.velocityX;
-            if (this.x < -740 * 2) {
-                this.x = 740 * 6;
-            }
-        }, 1000 / 60);
-    }
 
 
     playAnimation(images) {
@@ -87,7 +82,7 @@ class MovableObject extends DrawableObject {
         // }
         if (this instanceof Character) {
             this.energy -= 20;
-            world.statusText[0].setPercentage(this.energy);
+            this.world.statusText[0].setPercentage(this.energy);
             if (world.character.points > 0) {
                 this.addPoints(-20);
             }
@@ -98,8 +93,8 @@ class MovableObject extends DrawableObject {
         }
         if (this instanceof Endboss) {
             this.energy -= 10;
-            world.statusBar[4].setPercentage(this.energy);
-            world.statusText[3].setPercentage(this.energy);
+            this.world.statusBar[1].setPercentage(this.energy);
+            this.world.statusText[3].setPercentage(this.energy);
             this.addPoints(50);
         }
     }

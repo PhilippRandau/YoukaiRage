@@ -1,11 +1,19 @@
-body{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+
 }
 
-canvas{
-    background-color: black;
+h1 {
+  font-family: "PixelGothic";
+  font-size: 60px;
+  letter-spacing: 10px;
+}
+
+canvas {
+  background-color: black;
 }
 
 /* @font-face {
@@ -13,7 +21,7 @@ canvas{
     src: url("fonts/Iskoola Pota - Regular.ttf");
   } */
 
-  @font-face {
-    font-family: "PixelGothic";
-    src: url("fonts/Straight pixel gothic.otf");
-  }
+@font-face {
+  font-family: "PixelGothic";
+  src: url("fonts/Straight pixel gothic.otf");
+}

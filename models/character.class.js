@@ -1,21 +1,55 @@
 class Character extends MovableObject {
-    y = 280;
+    x = -462;
+    y = 288;
     charges = 100;
     points = 0;
-    velocityX = 4;
-    offsetCenterIMG = 2;
+    velocityX = 0;
+    offsetCenterIMG = 8;
+    modifiedHitboxHeight = 55;
     lastCall;
     enemieHit;
     walking_sound = new Audio('audio/walk.mp3');
-    world;
-    constructor() {
-        super().switchSprite('img/03_character_youkai/Idle.png', 5, 30);
-        this.animate();
+    firstAnimation;
 
-        this.interactions();
+    GHOST_BOTTLE = [
+        'img/05_Effects/ghost_bottle/ghost_bottle1.png',
+        'img/05_Effects/ghost_bottle/ghost_bottle2.png',
+        'img/05_Effects/ghost_bottle/ghost_bottle3.png',
+        'img/05_Effects/ghost_bottle/ghost_bottle4.png',
+    ]
+
+    constructor() {
+        super().loadImage('img/05_Effects/ghost_bottle/ghost_bottle1.png');
+        this.loadImages(this.GHOST_BOTTLE);
+        this.introAnimation();
     }
 
+   
+
+    introAnimation() {
+        this.firstAnimation = setInterval(() => {
+            this.playAnimation(this.GHOST_BOTTLE);
+            this.frameRate = 1;
+
+        }, 300);
+        setTimeout(() => {
+            clearInterval(this.firstAnimation);
+            this.interactions();
+            this.animate();
+        }, 1500);
+    }
+
+
+
+
     animate() {
+        this.y = 280;
+        this.x = -456;
+        this.offsetCenterIMG = 2;
+        this.modifiedHitboxHeight = 70;
+        this.velocityX = 4;
+
+        this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
         setInterval(() => {
             if (this.isDead()) {
                 this.switchSprite('img/03_character_youkai/Dead.png', 4, 30);
@@ -36,19 +70,15 @@ class Character extends MovableObject {
                 this.lastCall = new Date().getTime();
             } else if (this.isBored()) {
                 this.switchSprite('img/03_character_youkai/Idle.png', 5, 30);
-                // console.log('idle')
             }
-
         }, 50);
+
     }
 
     isBored() {
         let timepassed = new Date().getTime() - this.lastCall;
         return timepassed > 800;
     }
-
-
-    
 
     isJumping() {
         return this.velocityY < 0;
@@ -70,14 +100,18 @@ class Character extends MovableObject {
         setInterval(() => {
             if (!this.isDead()) {
                 this.walking_sound.pause();
-                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x_right) {
                     this.walkRight();
-                } else if (this.world.keyboard.LEFT && this.x > -370) {
+                } else if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x_left) {
                     this.walkLeft();
                 }
-                this.world.camera_x = -this.x + 50;
             }
-        }, 1000 / 144);
+            this.setCameraFocus();
+        }, 1000 / 244);
+    }
+
+    setCameraFocus() {
+        this.world.camera_x = -this.x + 50;
     }
 
     walkRight() {
@@ -99,11 +133,9 @@ class Character extends MovableObject {
             this.velocityY = -4;
             this.enemieHit = false;
         }
-
     }
 
     isTimePassed(time, lastCall) {
-        console.log(time)
         if (this.lastCharge === undefined) {
             return true;
         } else {
@@ -132,7 +164,7 @@ class Character extends MovableObject {
         this.hitbox.x = this.x + 52;
         this.hitbox.y = this.y + 55;
         this.hitbox.width = 20;
-        this.hitbox.height = 70;
+        this.hitbox.height = this.modifiedHitboxHeight;
     }
 
 

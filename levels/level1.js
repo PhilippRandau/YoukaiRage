@@ -5,7 +5,15 @@ const level1 = new Level(
         // new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', -719, 0),
         // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', -719, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/stars.png', -100, 0),
+     
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Bright/star.png', -100, 0),
+        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks2_half.png', -100, 220),
+        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks3_half.png', -100, 220),
+        // new BackgroundObject('img/02_Tiles/Green Tiles.png', -800, 0),
+        
+        
+        
         // new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 0, 0),
         // new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 0, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719, 0),
@@ -22,8 +30,8 @@ const level1 = new Level(
         // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', 719*3, 0),
     ],
     [
-        new Worker(0),
-        new Worker(1),
+        new Worker(0, -538, 259, false),
+        new Worker(1, -386, 259, true),
         new Worker(2),
         new MechWorker(3),
         new MechWorker(4),
@@ -43,37 +51,30 @@ const level1 = new Level(
        
     ],
     [
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 0, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*2, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*3, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*4, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*5, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*6, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*7, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*8, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*9, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*10, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*11, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*12, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*13, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*14, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*15, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*16, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*17, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*18, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*19, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*20, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*21, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*22, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*23, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*24, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*25, 400),
-        new Tile('img/02_Tiles/green tiles/Tile_11.png', 32*26, 400),
-        
-
+        new Tile('img/02_Tiles/Youkai_Game.png', -1570, 0),
     ],
     [
         // new Rat(),
+    ],
+    [
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+        new FallingAsteroids('img/05_Effects/Magic/6.png'),
+    ],
+    [
+        // Collision Blocks
     ]
 );

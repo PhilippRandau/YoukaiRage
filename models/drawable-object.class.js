@@ -1,5 +1,5 @@
 class DrawableObject {
-    x = 100;
+    x = 0;
     y = 180;
     img;
     imgScale = 1;
@@ -10,7 +10,7 @@ class DrawableObject {
     frameBuffer = 30;
     elapsedFrames = 0;
     offsetCenterIMG = 0;
-
+    world;
     loadImage(path) {
         this.img = new Image();
         this.img.onload = () => {
@@ -80,8 +80,16 @@ class DrawableObject {
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
+        if(this instanceof CollisionBlock){
+            world.collisionBlocks.forEach(collisionBlock => {
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(255, 0, 0 , 0.5)'
+                ctx.fillRect(collisionBlock.x, collisionBlock.y, collisionBlock.width, collisionBlock.height)
+                ctx.stroke();
+            })
+            
+        }
     }
-
 
     drawFrameHitbox(ctx) {
         if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss) {
@@ -91,7 +99,6 @@ class DrawableObject {
             ctx.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
             ctx.stroke();
         }
-
     }
 
 

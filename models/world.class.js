@@ -2,43 +2,17 @@ class World {
     backgroundObjects = level1.backgroundObjects;
     character = new Character();
     enemies = level1.enemies;
-    clouds = level1.asteroids;
+    asteroids = level1.asteroids;
     tiles = level1.tiles;
     creatures = level1.creatures;
+    fallingAsteroids = level1.fallingAsteroids;
+    collisionBlocks = level1.collisionBlocks;
     level = level1;
     canvas;
     ctx;
     keyboard;
-    camera_x = 0;
+    camera_x = 506.01;
     statusBar = [
-        new StatusBar(
-            [
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-                'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png'
-            ], 1000, 40, 640, 50, 100, 'static'),
-        new StatusBar(
-            [
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
-                'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
-            ], 1000, 80, 640, 50, 100, 'static'),
-        new StatusBar(
-            [
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/40.png',
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
-                'img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
-            ], 1000, 120, 640, 50, 100, 'static'),
-
         new StatusBar(
             [
                 'img/07_statusbars/Bar 1/LoadingBar_1_Background.png'
@@ -57,6 +31,8 @@ class World {
         new StatusText(240, 52, 640, 50, 'Boss Health', 435, 52, 100, 'white'),
     ];
     throwableObjects = [];
+    tileCollisions2D = [];
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -64,8 +40,12 @@ class World {
         this.keyboard = keyboard;
         this.update();
         this.setWorld();
+        this.worldGeneration();
         this.characterInteractions();
         this.updateAllHitboxes();
+
+
+
     }
 
     update() {
@@ -75,7 +55,6 @@ class World {
         this.character.applyGravity();
         this.character.updateHitbox();
         this.checkforVerticalCollisions();
-
         // update wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
@@ -83,6 +62,27 @@ class World {
 
         });
 
+    }
+
+
+
+    worldGeneration() {
+        this.generateCollisionBlocks();
+    }
+
+    generateCollisionBlocks() {
+        for (let i = 0; i < tileCollisions.length; i += 300) {
+            this.tileCollisions2D.push(tileCollisions.slice(i, i + 300))
+
+        }
+
+        this.tileCollisions2D.forEach((row, y) => {
+            row.forEach((symbol, x) => {
+                if (symbol >= 1) {
+                    this.collisionBlocks.push(new CollisionBlock(x * 32, y * 32))
+                }
+            })
+        })
     }
 
     updateAllHitboxes() {
@@ -95,7 +95,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        this.level.enemies[3].world = this;
+        this.level.enemies[6].world = this;
     }
 
     draw() {
@@ -109,11 +109,21 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addEachToMap(this.level.asteroids);
+        this.addEachToMap(this.asteroids);
+
+        this.addEachToMap(this.fallingAsteroids);
+
+        this.addEachToMap(this.level.tiles);
 
         this.addEachToMap(this.level.enemies);
 
-        this.addEachToMap(this.level.tiles);
+        
+
+        // this.collisionBlocks.forEach(collisionBlock => {
+        //     this.ctx.beginPath();
+        //     collisionBlock.drawCollisionBlocks(this.ctx)
+        //     this.ctx.stroke();
+        // })
 
         this.addToMap(this.character);
 
@@ -211,7 +221,7 @@ class World {
 
 
     checkforHorizontalCollisions() {
-        this.level.tiles.forEach(tile => {
+        this.collisionBlocks.forEach(tile => {
             if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
                 if (this.character.velocityX > 0) {
                     this.character.velocityX = 0;
@@ -228,7 +238,7 @@ class World {
     }
 
     checkforVerticalCollisions() {
-        this.level.tiles.forEach(tile => {
+        this.collisionBlocks.forEach(tile => {
             if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
                 if (this.character.velocityY > 0) {
                     this.character.velocityY = 0;

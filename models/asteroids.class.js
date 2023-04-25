@@ -7,10 +7,16 @@ class Asteroids extends MovableObject {
     constructor(imgPath, x) {
         super().loadImage(imgPath);
         this.x = x
-        this.animate();
+        this.setBackToSpawn();
     }
 
-    animate(){
-        this.moveLeft();
+    setBackToSpawn() {
+        setInterval(() => {
+            this.x -= this.velocityX;
+            if (this.x < -740 * 2) {
+                this.x = 740 * 8;
+            }
+        }, 1000 / 60);
     }
+
 }

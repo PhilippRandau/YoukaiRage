@@ -37,16 +37,17 @@ class Worker extends MovableObject {
 
     chicken_sound = new Audio('audio/chicken.mp3');
 
-    constructor(enemieID) {
+    constructor(enemieID, x, y, otherDirection) {
         super().loadImage('img/04_enemies/Worker/Idle.png');
         this.frameRate = 4;
         this.loadImages(this.GHOST_IMAGES);
         this.enemieID = enemieID;
-        this.x = 300;//300 + Math.random() * 500
+        this.x = x;
+        this.y = y;
         // this.walk();
         // this.velocityX = this.velocityX + Math.random() * 0.25
         this.animate();
-        this.otherDirection = true;
+        this.otherDirection = otherDirection;
     }
 
     walk() {

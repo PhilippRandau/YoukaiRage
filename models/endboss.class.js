@@ -3,7 +3,7 @@ class Endboss extends MovableObject {
     // width = 320;
     imgScale = 1.5;
     y = 255;
-    x = 4000;//2200
+    x = 6662;
     intervalAnimation;
     offsetCenterIMG = 27;
     chicken_sound = new Audio('audio/chicken.mp3');

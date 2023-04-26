@@ -37,10 +37,12 @@ const level1 = new Level(
         new Worker(4, 260, 259, true),
         new Worker(5, 487, 259, true),
         new Worker(6, 722, 259, true),
-        new MechWorker(7, 1962, 131, true), //1962
-        new MechWorker(8, 3429, 259, true),
-        new MechWorker(9, 4658, 259, true),
-        new Endboss(10),
+        new Dumper(7, 50, 259, true),
+        new Dumper(8, 200, 259, true),
+        new MechWorker(9, 1962, 131, true), //1962
+        new MechWorker(10, 3429, 259, true),
+        new MechWorker(11, 4658, 259, true),
+        new Endboss(12),
     ],
     [
         new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),

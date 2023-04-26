@@ -1,8 +1,8 @@
-class Worker extends MovableObject {
+class Dumper extends MovableObject {
     imgScale = 1.3;
     y = 275;
     intervalAnimation;
-    energy = 20;
+    energy = 40;
     velocityX = 0.6;
     offsetCenterIMG = 33;
 
@@ -38,8 +38,8 @@ class Worker extends MovableObject {
     chicken_sound = new Audio('audio/chicken.mp3');
 
     constructor(enemieID, x, y, otherDirection) {
-        super().loadImage('img/04_enemies/Worker/Idle.png');
-        this.frameRate = 4;
+        super().switchSprite('img/04_enemies/Dumper/Idle.png', 4, 30);
+        // this.frameRate = 4;
         this.loadImages(this.GHOST_IMAGES);
         this.enemieID = enemieID;
         this.x = x;
@@ -57,8 +57,7 @@ class Worker extends MovableObject {
             let random = Math.random();
             if (random < 0.35) {
                 this.otherDirection = false;
-                this.loadImage('img/04_enemies/Worker/Walk.png');
-                this.frameRate = 6;
+                this.switchSprite('img/04_enemies/Dumper/Walk.png', 6, 30);
                 intervalWalk = setInterval(() => {
                     this.x += this.velocityX;
                 }, 1000 / 120);
@@ -66,16 +65,14 @@ class Worker extends MovableObject {
                 this.animate();
             } else if (random > 0.65) {
                 this.otherDirection = true;
-                this.loadImage('img/04_enemies/Worker/Walk.png');
-                this.frameRate = 6;
+                this.switchSprite('img/04_enemies/Dumper/Walk.png', 6, 30);
                 intervalWalk = setInterval(() => {
                     this.x -= this.velocityX;
                 }, 1000 / 120);
                 clearInterval(this.intervalAnimation);
                 this.animate();
             } else if (random < 0.65 && random > 0.35) {
-                this.loadImage('img/04_enemies/Worker/Idle.png');
-                this.frameRate = 4;
+                this.switchSprite('img/04_enemies/Dumper/Idle.png', 4, 30);
                 clearInterval(this.intervalAnimation);
             }
             // this.chicken_sound.play();
@@ -95,7 +92,7 @@ class Worker extends MovableObject {
                         delete world.level.enemies[this.enemieID];
                     }
             } else {
-                this.switchSprite('img/04_enemies/Worker/Idle.png', 4, 30);
+                this.switchSprite('img/04_enemies/Dumper/Idle.png', 4, 30);
             }
         }, 100);
     }

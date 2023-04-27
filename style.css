@@ -2,13 +2,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  background-image: url('img/09_GUI/universe_background.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-position: 0px -1831px; */
 
 }
 
 h1 {
   font-family: "PixelGothic";
   font-size: 60px;
+  color: white;
   letter-spacing: 10px;
 }
 

@@ -39,7 +39,6 @@ class Dumper extends MovableObject {
 
     constructor(enemieID, x, y, otherDirection) {
         super().switchSprite('img/04_enemies/Dumper/Idle.png', 4, 30);
-        // this.frameRate = 4;
         this.loadImages(this.GHOST_IMAGES);
         this.enemieID = enemieID;
         this.x = x;

@@ -11,20 +11,21 @@ body {
 }
 
 h1 {
-  font-family: "PixelGothic";
-  font-size: 60px;
-  color: white;
+  font-family: "PixelGothic", Arial, Helvetica, sans-serif;
+  font-size: 100px;
+  /* color: #38002C; */
+  font-weight: 500;
   letter-spacing: 10px;
+  margin-block-start: 50px;
+  margin-block-end: 50px;
+  -webkit-text-stroke: 0.3px white;
+  -webkit-text-fill-color: #38002C;
+  text-shadow: 4px 4px 8px rgba(255, 255, 255, 0.4);
 }
 
 canvas {
   background-color: black;
 }
-
-/* @font-face {
-    font-family: "IskoolaPota";
-    src: url("fonts/Iskoola Pota - Regular.ttf");
-  } */
 
 @font-face {
   font-family: "PixelGothic";

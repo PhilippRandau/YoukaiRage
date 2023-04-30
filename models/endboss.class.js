@@ -1,13 +1,11 @@
-class Endboss extends MovableObject {
+class Endboss extends Enemies {
     // height = 320;
     // width = 320;
     imgScale = 1.5;
     y = 255;
     x = 6800;//6662
-    intervalAnimation;
     offsetCenterIMG = 27;
     chicken_sound = new Audio('audio/chicken.mp3');
-    intervalWalk;
     hitbox = {
         x: this.x,
         y: this.y,
@@ -85,13 +83,5 @@ class Endboss extends MovableObject {
             }
         }, 150);
     }
-
-    // updateHitbox(){
-    //     this.hitbox.x = this.x + 20;
-    //     this.hitbox.y = this.y + 32;
-    //     this.hitbox.width = 50;
-    //     this.hitbox.height = 80;
-    // }
-
 
 }

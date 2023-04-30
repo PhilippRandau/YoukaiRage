@@ -73,7 +73,7 @@ class DrawableObject {
 
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Tile) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'blue';
@@ -92,13 +92,20 @@ class DrawableObject {
     }
 
     drawFrameHitbox(ctx) {
-        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';
             ctx.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
             ctx.stroke();
         }
+    }
+
+    isColliding(mo) {
+        return this.y + this.height >= mo.y &&
+            this.y <= mo.y + mo.height &&
+            this.x <= mo.x + mo.width &&
+            (this.x + this.width) >= mo.x;
     }
 
 

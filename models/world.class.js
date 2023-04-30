@@ -38,11 +38,12 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.worldGeneration();
         this.update();
         this.setWorld();
-        this.worldGeneration();
+
         this.characterInteractions();
-        this.updateAllHitboxes();
+        // this.updateAllHitboxes();
 
 
 
@@ -55,6 +56,11 @@ class World {
         this.character.applyGravity();
         this.character.updateHitbox();
         this.checkforVerticalCollisions();
+
+
+        this.checkforBlockCollisionsEnemies();
+
+
         // update wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
@@ -85,17 +91,19 @@ class World {
         })
     }
 
-    updateAllHitboxes() {
-        setInterval(() => {
-            this.level.enemies.forEach(enemy => {
-                enemy.updateHitbox();
-            });
-        }, 100);
-    }
+    // updateAllHitboxes() {
+    //     setInterval(() => {
+    //         this.level.enemies.forEach(enemy => {
+    //             enemy.updateHitbox();
+    //         });
+    //     }, 100);
+    // }
 
     setWorld() {
         this.character.world = this;
-        this.level.enemies[10].world = this;
+        this.level.enemies.forEach(enemie => {
+            enemie.world = this;
+        });
     }
 
     draw() {
@@ -117,7 +125,7 @@ class World {
 
         this.addEachToMap(this.level.enemies);
 
-        
+
 
         // this.collisionBlocks.forEach(collisionBlock => {
         //     this.ctx.beginPath();
@@ -161,13 +169,13 @@ class World {
         }
 
         mo.draw(this.ctx);
-        // mo.drawFrame(this.ctx);
+        mo.drawFrame(this.ctx);
 
 
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
-        // mo.drawFrameHitbox(this.ctx);
+        mo.drawFrameHitbox(this.ctx);
     }
 
 
@@ -187,7 +195,7 @@ class World {
     characterInteractions() {
         setInterval(() => {
             this.checkCollisions();
-        }, 30);
+        }, 10);
     }
 
 
@@ -206,14 +214,16 @@ class World {
 
 
         this.throwableObjects.forEach((throwableObject) => {
-            if (this.level.enemies[10].isCollidingHitbox(this.level.enemies[10].hitbox, throwableObject) && this.level.enemies[10].energy > 0 && !throwableObject.hit) {
-                this.level.enemies[10].hit();
+            if (this.level.enemies[18].isCollidingHitbox(this.level.enemies[18].hitbox, throwableObject) && this.level.enemies[18].energy > 0 && !throwableObject.hit) {
+                this.level.enemies[18].hit();
                 throwableObject.hit = true;
             }
+
         });
 
 
     }
+
 
     isTimePassed(time) {
         return Date.now() - this.character.lastHitTime > time;
@@ -221,40 +231,125 @@ class World {
 
 
     checkforHorizontalCollisions() {
-        this.collisionBlocks.forEach(tile => {
-            if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
+        this.collisionBlocks.forEach(collisionBlock => {
+            if (this.character.isCollidingHitbox(this.character.hitbox, collisionBlock)) {
                 if (this.character.velocityX > 0) {
                     this.character.velocityX = 0;
                     const offset = this.character.hitbox.x - this.character.x + this.character.hitbox.width;
-                    this.character.x = tile.x - offset - 0.01;
+                    this.character.x = collisionBlock.x - offset - 0.01;
                 }
                 if (this.character.velocityX < 0) {
                     this.character.velocityX = 0;
                     const offset = this.character.hitbox.x - this.character.x;
-                    this.character.x = tile.x + tile.width - offset + 0.01;
+                    this.character.x = collisionBlock.x + collisionBlock.width - offset + 0.01;
                 }
             }
+
+            this.throwableObjects.forEach(throwableObject => {
+                if (throwableObject.isCollidingHitbox(throwableObject, collisionBlock) && !throwableObject.hit) {
+                    throwableObject.hit = true;
+                }
+            })
+
         });
     }
 
     checkforVerticalCollisions() {
-        this.collisionBlocks.forEach(tile => {
-            if (this.character.isCollidingHitbox(this.character.hitbox, tile)) {
+        this.collisionBlocks.forEach(collisionBlock => {
+            if (this.character.isCollidingHitbox(this.character.hitbox, collisionBlock)) {
                 if (this.character.velocityY > 0) {
                     this.character.velocityY = 0;
                     const offset = this.character.hitbox.y - this.character.y + this.character.hitbox.height;
-                    this.character.y = tile.y - offset - 0.01;
+                    this.character.y = collisionBlock.y - offset - 0.01;
                 }
                 if (this.character.velocityY < 0) {
                     this.character.velocityY = 0;
                     const offset = this.character.y - this.character.hitbox.y;
-                    this.character.y = tile.y + tile.height + offset + 0.01;
+                    this.character.y = collisionBlock.y + collisionBlock.height + offset + 0.01;
                 }
+
             }
         });
     }
 
+    // checkforBlockCollisionsEnemies() {
+
+    //     this.level.enemies.forEach(enemy => {
+    //         this.collisionBlocks.forEach(collisionBlock => {
+    //             enemy.updateHitbox();
+    //             this.checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock);
+    //             enemy.applyGravity();
+    //             enemy.updateHitbox();
+    //             this.checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock);
 
 
+    //         });
+    //     });
+    // }
 
+    checkforBlockCollisionsEnemies() {
+        // Gegner anwenden Schwerkraft
+        this.level.enemies.forEach(enemy => {
+            enemy.updateHitbox();
+        });
+
+        this.level.enemies.forEach(enemy => {
+            this.collisionBlocks.forEach(collisionBlock => {
+                this.checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock);
+            });
+        });
+        this.level.enemies.forEach(enemy => {
+            enemy.applyGravity();
+
+        });
+
+        this.level.enemies.forEach(enemy => {
+            enemy.updateHitbox();
+        });
+        // Überprüfen auf Kollisionen mit Blöcken
+        this.level.enemies.forEach(enemy => {
+            this.collisionBlocks.forEach(collisionBlock => {
+                this.checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock);
+            });
+        });
+    }
+    
+
+
+    checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock) {
+        if (enemy.isCollidingHitbox(enemy.hitbox, collisionBlock)) {
+            if (enemy.velocityX > 0) {
+                // console.log('collisionHoriz: x > 0')
+                enemy.velocityX = 0;
+                const offset = enemy.hitbox.x - enemy.x + enemy.hitbox.width;
+                enemy.x = collisionBlock.x - offset - 0.01;
+            }
+            if (enemy.velocityX < 0) {
+                // console.log('collisionHoriz: x < 0')
+                enemy.velocityX = 0;
+                const offset = enemy.hitbox.x - enemy.x;
+                enemy.x = collisionBlock.x + collisionBlock.width - offset + 0.01;
+            }
+        }
+    }
+
+
+    checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock) {
+        if (enemy.isCollidingHitbox(enemy.hitbox, collisionBlock)) {
+            // console.log(enemy.velocityY)
+            if (enemy.velocityY > 0) {
+                // console.log('collisionVert: Y > 0')
+                enemy.velocityY = 0;
+                const offset = enemy.hitbox.y - enemy.y + enemy.hitbox.height;
+                enemy.y = collisionBlock.y - offset - 0.01;
+            }
+            if (enemy.velocityY < 0) {
+                // console.log('collisionVert: Y < 0')
+                enemy.velocityY = 0;
+                const offset = enemy.y - enemy.hitbox.y;
+                enemy.y = collisionBlock.y + collisionBlock.height + offset + 0.01;
+            }
+
+        }
+    }
 }

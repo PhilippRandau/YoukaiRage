@@ -2,14 +2,13 @@ class MovableObject extends DrawableObject {
     enemieID;
     // speed = 0.2;
     otherDirection = false;
-    direction = '';
+    // direction = '';
     velocityX = 0;
     velocityY = 1;
     gravity = 0.02;
     energy = 100;
     lastHit = 0;
     previousImg;
-
     hitbox = {
         x: this.x,
         y: this.y,
@@ -34,6 +33,11 @@ class MovableObject extends DrawableObject {
         }
         if (this.y + this.height + this.velocityY < canvas.height) {
             this.velocityY += this.gravity;
+            // if (this instanceof Worker) {
+            //     console.log('worker velocity:'  + this.velocityY)
+
+            // }
+
         } else {
             this.velocityY = 0;
         }
@@ -55,12 +59,7 @@ class MovableObject extends DrawableObject {
     }
 
 
-    isColliding(mo) {
-        return this.y + this.height >= mo.y &&
-            this.y <= mo.y + mo.height &&
-            this.x <= mo.x + mo.width &&
-            (this.x + this.width) >= mo.x;
-    }
+
 
     isCollidingHitbox(object1, object2) {
         return object1.y + object1.height >= object2.y &&
@@ -87,7 +86,7 @@ class MovableObject extends DrawableObject {
                 this.addPoints(-20);
             }
         }
-        if (this instanceof Worker || this instanceof MechWorker) {
+        if (this instanceof Worker || this instanceof MechWorker || this instanceof Dumper) {
             this.energy -= 20;
             this.addPoints(20);
         }

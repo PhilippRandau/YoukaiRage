@@ -1,6 +1,7 @@
 class ThrowableObject extends MovableObject {
     otherDirectionCharge;
     startPositionX;
+    yAnimationOffset;
     hit;
     chargeShoot;
     constructor(x, y, otherDirectionCharge) {
@@ -11,7 +12,7 @@ class ThrowableObject extends MovableObject {
         this.locChargeStart(x, y);
         this.animate();
         this.startPositionX = this.x;
-        
+        this.yAnimationOffset = this.y - 25;
     }
 
 
@@ -35,21 +36,21 @@ class ThrowableObject extends MovableObject {
     }
 
     animate() {
+        
         let intervalAnimation = setInterval(() => {
             let distance = this.x - this.startPositionX;
-            if (distance > 800 ||this.hit) {
+            if (distance > 800 || this.hit) {
                 this.offsetCenterIMG = -30;
-                this.y = this.y - 10;
+                this.y = this.yAnimationOffset;
                 clearInterval(this.chargeShoot);
                 this.switchSprite('img/05_Effects/Magic/4_2.png', 4, 15);
-                
                 if (this.currentFrame == 3) {
                     clearInterval(intervalAnimation);
                     setTimeout(() => {
                         world.throwableObjects.splice(world.throwableObjects.indexOf(this), 1);
-                    }, 500);
+                    }, 50);
                 }
             }
-        }, 100);
+        }, 10);
     }
 }

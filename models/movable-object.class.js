@@ -33,14 +33,16 @@ class MovableObject extends DrawableObject {
         }
         if (this.y + this.height + this.velocityY < canvas.height) {
             this.velocityY += this.gravity;
-            // if (this instanceof Worker) {
-            //     console.log('worker velocity:'  + this.velocityY)
-
-            // }
-
         } else {
-            this.velocityY = 0;
+            // Stopps falling lower than canvas height
+            // this.velocityY = 0;
         }
+        if (this.y + this.height > canvas.height && this.energy > 0) {
+            this.hit();
+            this.energy = 0;
+            
+        }
+        
     }
 
 
@@ -68,12 +70,6 @@ class MovableObject extends DrawableObject {
             (object1.x + object1.width) >= object2.x;
     }
 
-
-    // //   // Wenn der Charakter auf einer Plattform steht, bewege ihn mit der Plattform
-    // //   if (character.isOnPlatform) {
-    // //     character.y += platform.speedY;
-    // //   }
-    // }
 
     hit() {
         // if (this.energy > 0) {
@@ -112,15 +108,7 @@ class MovableObject extends DrawableObject {
         return this.energy === 0;
     }
 
-    switchSprite(img, frameRate, frameBuffer) {
-        if (img !== this.previousImg) {
-            this.currentFrame = 0;
-        }
-        this.loadImage(img);
-        this.frameRate = frameRate;
-        this.frameBuffer = frameBuffer;
-        this.previousImg = img;
-    }
+    
 
 
     updateHitbox() {

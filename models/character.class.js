@@ -118,14 +118,14 @@ class Character extends MovableObject {
         this.velocityX = 1;
         this.x += this.velocityX;
         this.otherDirection = false;
-        this.walking_sound.play();
+        // this.walking_sound.play();
     }
 
     walkLeft() {
         this.velocityX = -1;
         this.x += this.velocityX;
         this.otherDirection = true;
-        this.walking_sound.play();
+        // this.walking_sound.play();
     }
 
     jump() {

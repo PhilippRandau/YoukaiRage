@@ -88,5 +88,11 @@ const level1 = new Level(
     ],
     [
         // Collision Blocks
+    ],
+    [
+        new Collectible(0, -150, 60),
+        new Collectible(1, -120, 60),
+        new Collectible(2, -90, 60),
+        new Collectible(3, -60, 60),
     ]
 );

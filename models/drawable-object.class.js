@@ -33,6 +33,16 @@ class DrawableObject {
 
     }
 
+    switchSprite(img, frameRate, frameBuffer) {
+        if (img !== this.previousImg) {
+            this.currentFrame = 0;
+        }
+        this.loadImage(img);
+        this.frameRate = frameRate;
+        this.frameBuffer = frameBuffer;
+        this.previousImg = img;
+    }
+
 
     cropbox() {
         return {

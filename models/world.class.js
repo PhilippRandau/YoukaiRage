@@ -7,6 +7,7 @@ class World {
     creatures = level1.creatures;
     fallingAsteroids = level1.fallingAsteroids;
     collisionBlocks = level1.collisionBlocks;
+    collectibles = level1.collectibles;
     level = level1;
     canvas;
     ctx;
@@ -32,7 +33,9 @@ class World {
     ];
     throwableObjects = [];
     tileCollisions2D = [];
-
+    audio = true;
+    background_Sound_Outside = new Audio('audio/background/backgroundSoundEffectOutside.mp3');
+    background_Sound_EnemyBase = new Audio('audio/background/backgroundSoundEffectEnemieBase.mp3');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -43,7 +46,6 @@ class World {
         this.setWorld();
 
         this.characterInteractions();
-        // this.updateAllHitboxes();
 
 
 
@@ -51,15 +53,12 @@ class World {
 
     update() {
         this.draw();
-        this.character.updateHitbox();
-        this.checkforHorizontalCollisions();
-        this.character.applyGravity();
-        this.character.updateHitbox();
-        this.checkforVerticalCollisions();
 
+        this.checkforBlockCollisionsCharacter();
 
         this.checkforBlockCollisionsEnemies();
 
+        this.playBackgroundEffects();
 
         // update wird immer wieder aufgerufen
         let self = this;
@@ -69,8 +68,25 @@ class World {
         });
 
     }
+    checkforBlockCollisionsCharacter() {
+        this.character.updateHitbox();
+        this.checkforHorizontalCollisions();
+        this.character.applyGravity();
+        this.character.updateHitbox();
+        this.checkforVerticalCollisions();
+    }
 
 
+    playBackgroundEffects() {
+        if (this.audio) {
+            if (this.character.x > 3288) {
+                this.background_Sound_EnemyBase.play();
+            } else {
+                this.background_Sound_Outside.play();
+            }
+
+        }
+    }
 
     worldGeneration() {
         this.generateCollisionBlocks();
@@ -91,18 +107,13 @@ class World {
         })
     }
 
-    // updateAllHitboxes() {
-    //     setInterval(() => {
-    //         this.level.enemies.forEach(enemy => {
-    //             enemy.updateHitbox();
-    //         });
-    //     }, 100);
-    // }
-
     setWorld() {
         this.character.world = this;
-        this.level.enemies.forEach(enemie => {
+        this.enemies.forEach(enemie => {
             enemie.world = this;
+        });
+        this.collectibles.forEach(collectible => {
+            collectible.world = this;
         });
     }
 
@@ -132,6 +143,8 @@ class World {
         //     collisionBlock.drawCollisionBlocks(this.ctx)
         //     this.ctx.stroke();
         // })
+
+        this.addEachToMap(this.collectibles);
 
         this.addToMap(this.character);
 
@@ -169,13 +182,13 @@ class World {
         }
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
 
 
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
-        mo.drawFrameHitbox(this.ctx);
+        // mo.drawFrameHitbox(this.ctx);
     }
 
 
@@ -204,6 +217,7 @@ class World {
             if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && !this.character.isDead() && this.character.isFalling() && enemy.energy > 0) {
                 this.character.enemieHit = true;
                 enemy.hit();
+                this.character.lastHitTime = Date.now();
             } else if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0 && enemy.energy > 0) {
                 if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
                     this.character.hit();
@@ -220,6 +234,16 @@ class World {
             }
 
         });
+
+        this.collectibles.forEach((collectible) => {
+
+            if (this.character.isCollidingHitbox(this.character.hitbox, collectible)) {
+                collectible.collect();
+                throwableObject.hit = true;
+            }
+
+
+        })
 
 
     }
@@ -270,29 +294,14 @@ class World {
 
             }
         });
+
     }
 
-    // checkforBlockCollisionsEnemies() {
-
-    //     this.level.enemies.forEach(enemy => {
-    //         this.collisionBlocks.forEach(collisionBlock => {
-    //             enemy.updateHitbox();
-    //             this.checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock);
-    //             enemy.applyGravity();
-    //             enemy.updateHitbox();
-    //             this.checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock);
-
-
-    //         });
-    //     });
-    // }
 
     checkforBlockCollisionsEnemies() {
-        // Gegner anwenden Schwerkraft
         this.level.enemies.forEach(enemy => {
             enemy.updateHitbox();
         });
-
         this.level.enemies.forEach(enemy => {
             this.collisionBlocks.forEach(collisionBlock => {
                 this.checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock);
@@ -300,32 +309,27 @@ class World {
         });
         this.level.enemies.forEach(enemy => {
             enemy.applyGravity();
-
         });
-
         this.level.enemies.forEach(enemy => {
             enemy.updateHitbox();
         });
-        // Überprüfen auf Kollisionen mit Blöcken
         this.level.enemies.forEach(enemy => {
             this.collisionBlocks.forEach(collisionBlock => {
                 this.checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock);
             });
         });
     }
-    
+
 
 
     checkforHorizontalBlockCollisionsEnemies(enemy, collisionBlock) {
         if (enemy.isCollidingHitbox(enemy.hitbox, collisionBlock)) {
             if (enemy.velocityX > 0) {
-                // console.log('collisionHoriz: x > 0')
                 enemy.velocityX = 0;
                 const offset = enemy.hitbox.x - enemy.x + enemy.hitbox.width;
                 enemy.x = collisionBlock.x - offset - 0.01;
             }
             if (enemy.velocityX < 0) {
-                // console.log('collisionHoriz: x < 0')
                 enemy.velocityX = 0;
                 const offset = enemy.hitbox.x - enemy.x;
                 enemy.x = collisionBlock.x + collisionBlock.width - offset + 0.01;
@@ -336,15 +340,12 @@ class World {
 
     checkforVerticalBlockCollisionsEnemies(enemy, collisionBlock) {
         if (enemy.isCollidingHitbox(enemy.hitbox, collisionBlock)) {
-            // console.log(enemy.velocityY)
             if (enemy.velocityY > 0) {
-                // console.log('collisionVert: Y > 0')
                 enemy.velocityY = 0;
                 const offset = enemy.hitbox.y - enemy.y + enemy.hitbox.height;
                 enemy.y = collisionBlock.y - offset - 0.01;
             }
             if (enemy.velocityY < 0) {
-                // console.log('collisionVert: Y < 0')
                 enemy.velocityY = 0;
                 const offset = enemy.y - enemy.hitbox.y;
                 enemy.y = collisionBlock.y + collisionBlock.height + offset + 0.01;

@@ -33,7 +33,7 @@ class World {
     ];
     throwableObjects = [];
     tileCollisions2D = [];
-    audio = true;
+    audio = false;
     background_Sound_Outside = new Audio('audio/background/backgroundSoundEffectOutside.mp3');
     background_Sound_EnemyBase = new Audio('audio/background/backgroundSoundEffectEnemieBase.mp3');
 
@@ -236,13 +236,9 @@ class World {
         });
 
         this.collectibles.forEach((collectible) => {
-
             if (this.character.isCollidingHitbox(this.character.hitbox, collectible)) {
                 collectible.collect();
-                throwableObject.hit = true;
             }
-
-
         })
 
 

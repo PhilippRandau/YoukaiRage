@@ -9,7 +9,7 @@ class Collectible extends DrawableObject{
     collecting_sound = new Audio('audio/collecting/collecting.mp3')
 
     collect(){
-        this.world.character.points += 20;
+        this.world.character.addPoints(20)
         if (this.world.audio) {
             this.collecting_sound.play();
         }

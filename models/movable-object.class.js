@@ -38,11 +38,9 @@ class MovableObject extends DrawableObject {
             // this.velocityY = 0;
         }
         if (this.y + this.height > canvas.height && this.energy > 0) {
-            this.hit();
-            this.energy = 0;
-            
+            this.instantDeath();
         }
-        
+
     }
 
 
@@ -70,6 +68,13 @@ class MovableObject extends DrawableObject {
             (object1.x + object1.width) >= object2.x;
     }
 
+    instantDeath() {
+            this.energy = 0;
+            if (this instanceof Character) {
+                this.world.statusText[0].setPercentage(this.energy);
+            }
+    }
+
 
     hit() {
         // if (this.energy > 0) {
@@ -92,11 +97,12 @@ class MovableObject extends DrawableObject {
             this.world.statusText[3].setPercentage(this.energy);
             this.addPoints(50);
         }
+
     }
 
     addPoints(amount) {
-        world.character.points += amount;
-        world.statusText[2].setPercentage(world.character.points);
+        this.world.character.points += amount;
+        this.world.statusText[2].setPercentage(this.world.character.points);
     }
 
     isHurt() {
@@ -108,7 +114,7 @@ class MovableObject extends DrawableObject {
         return this.energy === 0;
     }
 
-    
+
 
 
     updateHitbox() {

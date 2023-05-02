@@ -48,7 +48,7 @@ const level1 = new Level(
         new MechWorker(15, 3429, 250, true),
         new MechWorker(16, 4080, 250, true),
         new MechWorker(17, 4658, 250, true),
-        new Endboss(18),
+        // new Endboss(18),
     ],
     [
         new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),

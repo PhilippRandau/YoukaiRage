@@ -1,4 +1,6 @@
 class World {
+    UPDATE_INTERVAL = 1000 / 60; // 60 FPS
+    lastUpdateTime = Date.now();
     backgroundObjects = level1.backgroundObjects;
     character = new Character();
     enemies = level1.enemies;
@@ -33,7 +35,7 @@ class World {
     ];
     throwableObjects = [];
     tileCollisions2D = [];
-    audio = false;
+    audio = true;
     background_Sound_Outside = new Audio('audio/background/backgroundSoundEffectOutside.mp3');
     background_Sound_EnemyBase = new Audio('audio/background/backgroundSoundEffectEnemieBase.mp3');
 
@@ -47,11 +49,12 @@ class World {
 
         this.characterInteractions();
 
-
-
     }
 
     update() {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - this.lastUpdateTime;
+
         this.draw();
 
         this.checkforBlockCollisionsCharacter();
@@ -60,14 +63,33 @@ class World {
 
         this.playBackgroundEffects();
 
-        // update wird immer wieder aufgerufen
-        let self = this;
-        requestAnimationFrame(function () {
-            self.update();
+        this.updateFunctions();
 
+        this.lastUpdateTime = currentTime;
+
+        setTimeout(() => {
+            this.update();
+        }, this.UPDATE_INTERVAL - elapsedTime);
+
+        // let self = this;
+        // requestAnimationFrame(() => {
+        //     self.update();
+        // });
+    }
+
+    updateFunctions() {
+        this.character.update();
+
+        this.enemies.forEach(enemie => {
+            enemie.update();
         });
 
+        this.throwableObjects.forEach(throwableObject => {
+            throwableObject.update();
+        })
     }
+
+
     checkforBlockCollisionsCharacter() {
         this.character.updateHitbox();
         this.checkforHorizontalCollisions();
@@ -84,7 +106,6 @@ class World {
             } else {
                 this.background_Sound_Outside.play();
             }
-
         }
     }
 
@@ -135,14 +156,6 @@ class World {
         this.addEachToMap(this.level.tiles);
 
         this.addEachToMap(this.level.enemies);
-
-
-
-        // this.collisionBlocks.forEach(collisionBlock => {
-        //     this.ctx.beginPath();
-        //     collisionBlock.drawCollisionBlocks(this.ctx)
-        //     this.ctx.stroke();
-        // })
 
         this.addEachToMap(this.collectibles);
 
@@ -226,9 +239,18 @@ class World {
             }
         });
 
+        let endboss = this.level.enemies[18];
+
+        if (endboss.isCollidingHitbox(endboss.hitboxAttack, this.character.hitbox) && this.character.energy > 0 && endboss.energy > 0 && endboss.isAttacking) {
+            if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
+                this.character.hit();
+                this.character.lastHitTime = Date.now();
+            }
+        }
+
 
         this.throwableObjects.forEach((throwableObject) => {
-            if (this.level.enemies[18].isCollidingHitbox(this.level.enemies[18].hitbox, throwableObject) && this.level.enemies[18].energy > 0 && !throwableObject.hit) {
+            if (this.level.enemies[18].isCollidingHitbox(this.level.enemies[18].hitbox, throwableObject.hitbox) && this.level.enemies[18].energy > 0 && !throwableObject.hit) {
                 this.level.enemies[18].hit();
                 throwableObject.hit = true;
             }
@@ -266,7 +288,7 @@ class World {
             }
 
             this.throwableObjects.forEach(throwableObject => {
-                if (throwableObject.isCollidingHitbox(throwableObject, collisionBlock) && !throwableObject.hit) {
+                if (throwableObject.isCollidingHitbox(throwableObject.hitbox, collisionBlock) && !throwableObject.hit) {
                     throwableObject.hit = true;
                 }
             })
@@ -287,7 +309,6 @@ class World {
                     const offset = this.character.y - this.character.hitbox.y;
                     this.character.y = collisionBlock.y + collisionBlock.height + offset + 0.01;
                 }
-
             }
         });
 

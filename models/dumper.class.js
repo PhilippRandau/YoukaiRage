@@ -10,12 +10,8 @@ class Dumper extends Enemies {
         height: 60,
     }
 
-    velocityRunX = 0.8;
-    velocityWalkX = 0.4;
-
-    walkRangeX = 200;
-    attackRangeX = 100;
-    idleRangeX = 15;
+    velocityRunX = 1.2;
+    velocityWalkX = 0.6;
 
     idle_images = 'img/04_enemies/Dumper/Idle.png'
     attack_images = 'img/04_enemies/Dumper/Attack3.png'
@@ -27,12 +23,12 @@ class Dumper extends Enemies {
     amountWalkImages = 4;
     amountHurtImages = 2;
 
-    walking_sound = new Audio('audio/walking_enemies/walk.mp3');
-    running_sound = new Audio('audio/walking_enemies/run.mp3');
+    walking_sound = new Audio('audio/enemies/walk_run/walk.mp3');
+    running_sound = new Audio('audio/enemies/walk_run/run.mp3');
 
 
     constructor(enemieID, x, y, otherDirection) {
-        super().switchSprite(this.idle_images, this.amountIdleImages, 25);
+        super().switchSprite(this.idle_images, this.amountIdleImages, this.bufferIdleImages);
 
         this.loadImages(this.GHOST_IMAGES);
 
@@ -42,7 +38,7 @@ class Dumper extends Enemies {
         this.otherDirection = otherDirection;
 
         setTimeout(() => {
-            this.walk();
+            this.startAnimations = true;
         }, 1000);
     }
 

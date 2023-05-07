@@ -25,9 +25,23 @@ h1 {
 
 canvas {
   background-color: black;
+  display: block;
 }
 
 @font-face {
   font-family: "PixelGothic";
   src: url("fonts/Straight pixel gothic.otf");
+}
+
+/* ---------------Smartphones--------------- */
+@media only screen and (max-width: 720px) {
+  canvas {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: 100vh;
+  }
 }

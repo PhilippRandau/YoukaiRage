@@ -1,11 +1,8 @@
 class Endboss extends Enemies {
-    // height = 320;
-    // width = 320;
     imgScale = 1.5;
-    y = 255;
-    x = 6800;//6662
     offsetCenterIMG = 27;
-    chicken_sound = new Audio('audio/chicken.mp3');
+    isAttacking = false;
+
     hitbox = {
         x: this.x,
         y: this.y,
@@ -17,71 +14,96 @@ class Endboss extends Enemies {
         x: 47,
         y: 32,
         width: 50,
-        height: 80,
+        height: 90,
     }
 
+    hitboxAttack = {
+        x: this.x,
+        y: this.y,
+        width: 0,
+        height: 0,
+    }
 
-    constructor(enemieID) {
-        super().loadImage('img/04_enemies/Endboss/Idle.png');
-        this.frameRate = 4;
-        // this.x = 300 + Math.random() * 500;
-        // this.walk();
+    offsetAttack = {
+        x: -28,
+        y: 95,
+        width: 75,
+        height: 12,
+    }
+
+    velocityRunX = 0.8;
+    velocityWalkX = 0.4;
+
+    walkRangeX = 350;
+    attackRangeX = 125;
+    idleRangeX = 15;
+
+    idle_images = 'img/04_enemies/Endboss/Idle.png';
+    attack_images = 'img/04_enemies/Endboss/Attack1.png';
+    walk_images = 'img/04_enemies/Endboss/Walk.png';
+    hurt_images = 'img/04_enemies/Endboss/Hurt.png';
+
+    amountIdleImages = 4;
+    amountAttackImages = 4;
+    amountWalkImages = 4;
+    amountHurtImages = 2;
+    amountDeathImages = 4;
+
+    bufferAttackImages = 15;
+
+    walking_sound = new Audio('audio/enemies/walk_run/walk.mp3');
+    running_sound = new Audio('audio/enemies/walk_run/run.mp3');
+
+
+    constructor(enemieID, x, y, otherDirection) {
+        super().switchSprite(this.idle_images, this.amountIdleImages, this.bufferIdleImages);
+
+        this.loadImages(this.GHOST_IMAGES);
+
         this.enemieID = enemieID;
-        this.velocityX = 0.8;
-        this.animate();
-        this.otherDirection = true;
+        this.x = x;
+        this.y = y;
+        this.otherDirection = otherDirection;
+
+        setTimeout(() => {
+            this.startAnimations = true;
+        }, 1000);
     }
+
+
 
     walk() {
-        setInterval(() => {
-            clearInterval(this.intervalWalk);
-            if (!this.isDead()) {
-                let random = Math.random();
-                if (random < 0.35) {
-                    this.otherDirection = false;
-                    this.loadImage('img/04_enemies/Endboss/Walk.png');
-                    this.frameRate = 4;
-                    this.intervalWalk = setInterval(() => {
-                        this.x += this.velocityX;
-                    }, 1000 / 120);
-                    // clearInterval(this.intervalAnimation);
-                    // this.animate();
-                } else if (random > 0.65) {
-                    this.otherDirection = true;
-                    this.loadImage('img/04_enemies/Endboss/Walk.png');
-                    this.frameRate = 4;
-                    this.intervalWalk = setInterval(() => {
-                        this.x -= this.velocityX;
-                    }, 1000 / 120);
-                    // clearInterval(this.intervalAnimation);
-                    // this.animate();
-                } else if (random < 0.65 && random > 0.35) {
-                    this.loadImage('img/04_enemies/Endboss/Idle.png');
-                    this.frameRate = 4;
-                    // clearInterval(this.intervalAnimation);
-                }
-            }
-            // this.chicken_sound.play();
-        }, 2000);
-    }
+        clearInterval(this.intervalWalk);
+        if (!this.isDead()) {
+            if (this.isHurt()) {
+                this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
+                this.isAttacking = false;
 
-    animate() {
-        this.intervalAnimation = setInterval(() => {
-            if (this.isDead()) {
-                this.switchSprite('img/04_enemies/Endboss/Death.png', 6, 30);
-                // this.velocityX = 0;
-                // clearInterval(this.intervalWalk);
-                if (this.currentFrame >= 4) {
-                    clearInterval(this.intervalAnimation);
-                    this.switchSprite('img/04_enemies/Endboss/Death.png', 0, 30);
-                }
-            } else if (this.isHurt()) {
-                this.switchSprite('img/04_enemies/Endboss/Hurt.png', 2, 30);
+            } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
+                this.isAttacking = false;
+                this.enemyIdle();
+            } else if (this.inRangeXRight(this.attackRangeX)) {
+                this.isAttacking = true;
+                this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
 
+            } else if (this.inRangeXLeft(this.attackRangeX)) {
+                this.isAttacking = true;
+                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+            } else if (this.inRangeXRight(this.walkRangeX)) {
+                this.isAttacking = false;
+                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+            } else if (this.inRangeXLeft(this.walkRangeX)) {
+                this.isAttacking = false;
+                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else {
-                this.switchSprite('img/04_enemies/Endboss/Idle.png', 4, 30);
+                this.isAttacking = false;
+                this.enemyIdle();
             }
-        }, 150);
+            clearInterval(this.intervalAnimation);
+            this.animationDead();
+        }
+
     }
+
 
 }

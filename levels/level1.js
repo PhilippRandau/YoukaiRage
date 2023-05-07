@@ -6,14 +6,14 @@ const level1 = new Level(
         // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', -719, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 0, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/stars.png', -100, 0),
-     
+
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Bright/star.png', -100, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks2_half.png', -100, 220),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks3_half.png', -100, 220),
         // new BackgroundObject('img/02_Tiles/Green Tiles.png', -800, 0),
-        
-        
-        
+
+
+
         // new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 0, 0),
         // new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 0, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719, 0),
@@ -48,19 +48,19 @@ const level1 = new Level(
         new MechWorker(15, 3429, 250, true),
         new MechWorker(16, 4080, 250, true),
         new MechWorker(17, 4658, 250, true),
-        // new Endboss(18),
+        new Endboss(18, 6800, 250, true),//6800
     ],
     [
         new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),
         new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 0),
         new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*2),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*3),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719*4),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*5),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*6),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719*7),
-       
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719 * 2),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 3),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719 * 4),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 5),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 6),
+        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 7),
+
     ],
     [
         new Tile('img/02_Tiles/Youkai_Game.png', -1570, 0),
@@ -94,5 +94,23 @@ const level1 = new Level(
         new Collectible(1, -120, 60),
         new Collectible(2, -90, 60),
         new Collectible(3, -60, 60),
+        new Collectible(4, 130, 120),
+        new Collectible(5, 160, 120),
+        new Collectible(6, 870, 120),
+        new Collectible(7, 900, 120),
+        new Collectible(8, 930, 120),
+        new Collectible(9, 2785, 90),
+        new Collectible(10, 2755, 90),
+        new Collectible(11, 2725, 90),
+        new Collectible(12, 2950, 90),
+        new Collectible(13, 3140, 90),
+        new Collectible(14, 3300, 180),
+        new Collectible(15, 5925, 280),
+        new Collectible(16, 5955, 280),
+        new Collectible(17, 6660, 160),
+        new Collectible(18, 6725, 160),
+        new Collectible(19, 7110, 420),
+        new Collectible(20, 7140, 420),
+        new Collectible(21, 7170, 420),
     ]
 );

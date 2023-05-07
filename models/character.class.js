@@ -8,7 +8,10 @@ class Character extends MovableObject {
     modifiedHitboxHeight = 55;
     lastCall;
     enemieHit;
-    walking_sound = new Audio('audio/walk.mp3');
+    characterInteraction = false;
+
+
+    // walking_sound = new Audio('audio/walk.mp3');
     firstAnimation;
 
     GHOST_BOTTLE = [
@@ -24,7 +27,15 @@ class Character extends MovableObject {
         this.introAnimation();
     }
 
-   
+    update() {
+        if (this.characterInteraction) {
+            this.setCameraFocus();
+            this.interactions();
+            this.animate();
+        }
+    }
+
+
 
     introAnimation() {
         this.firstAnimation = setInterval(() => {
@@ -34,44 +45,41 @@ class Character extends MovableObject {
         }, 300);
         setTimeout(() => {
             clearInterval(this.firstAnimation);
-            this.interactions();
-            this.animate();
-        }, 1500);
+            this.characterInteraction = true;
+            this.y = 280;
+            this.x = -456;//-456
+            this.offsetCenterIMG = 2;
+            this.modifiedHitboxHeight = 70;
+            this.velocityX = 4;
+            this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
+        },200);//1500
     }
 
 
 
 
     animate() {
-        this.y = 280;
-        this.x = -456;
-        this.offsetCenterIMG = 2;
-        this.modifiedHitboxHeight = 70;
-        this.velocityX = 4;
-
-        this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
-        setInterval(() => {
-            if (this.isDead()) {
-                this.switchSprite('img/03_character_youkai/Dead.png', 4, 30);
-            } else if (this.isHurt()) {
-                this.switchSprite('img/03_character_youkai/Hurt.png', 3, 30);
-                this.lastCall = new Date().getTime();
-            } else if (this.world.keyboard.CHARGE && this.charges > 0) {
-                this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 20);
-                this.lastCall = new Date().getTime();
-            } else if (this.isFalling()) {
-                this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
-                this.lastCall = new Date().getTime();
-            } else if (this.isJumping()) {
-                this.switchSprite('img/03_character_youkai/Scream.png', 4, 30);
-                this.lastCall = new Date().getTime();
-            } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && (!this.isJumping() && !this.isFalling())) {
-                this.switchSprite('img/03_character_youkai/Walk.png', 5, 30);
-                this.lastCall = new Date().getTime();
-            } else if (this.isBored()) {
-                this.switchSprite('img/03_character_youkai/Idle.png', 5, 30);
-            }
-        }, 50);
+        // setInterval(() => {
+        if (this.isDead()) {
+            this.switchSprite('img/03_character_youkai/Dead.png', 4, 15);
+        } else if (this.isHurt()) {
+            this.switchSprite('img/03_character_youkai/Hurt.png', 3, 15);
+            this.lastCall = new Date().getTime();
+        } else if (this.world.keyboard.CHARGE && this.charges > 0) {
+            this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 5);
+            this.lastCall = new Date().getTime();
+        } else if (this.isFalling() || this.jumping) {
+            this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
+            this.lastCall = new Date().getTime();
+        } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && (!this.jumping && !this.isFalling())) {
+            this.switchSprite('img/03_character_youkai/Walk.png', 5, 15);
+            this.lastCall = new Date().getTime();
+        } else if (this.isBored()) {
+            this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
+        } else {
+            this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
+        }
+        // }, 50);
 
     }
 
@@ -91,23 +99,23 @@ class Character extends MovableObject {
     interactions() {
         this.walk();
         this.charge();
-        setInterval(() => {
-            this.jump();
-        }, 1000 / 144);
+        // setInterval(() => {
+        this.jump();
+        // }, 1000 / 144);
     }
 
     walk() {
-        setInterval(() => {
-            if (!this.isDead()) {
-                this.walking_sound.pause();
-                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x_right) {
-                    this.walkRight();
-                } else if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x_left) {
-                    this.walkLeft();
-                }
+        // setInterval(() => {
+        if (!this.isDead()) {
+            // this.walking_sound.pause();
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x_right) {
+                this.walkRight();
+            } else if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x_left) {
+                this.walkLeft();
             }
-            this.setCameraFocus();
-        }, 1000 / 244);
+        }
+        // this.setCameraFocus();
+        // }, 1000 / 120);
     }
 
     setCameraFocus() {
@@ -115,23 +123,27 @@ class Character extends MovableObject {
     }
 
     walkRight() {
-        this.velocityX = 1;
+        this.velocityX = 1.5;
         this.x += this.velocityX;
         this.otherDirection = false;
         // this.walking_sound.play();
     }
 
     walkLeft() {
-        this.velocityX = -1;
+        this.velocityX = -1.5;
         this.x += this.velocityX;
         this.otherDirection = true;
         // this.walking_sound.play();
     }
 
     jump() {
-        if ((this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) || this.enemieHit) {
+        if ((this.world.keyboard.UP && this.isOnGround() && !this.jumping && !this.isDead()) || this.enemieHit) {
             this.velocityY = -4;
             this.enemieHit = false;
+            this.jumping = true;
+        }
+        if (this.jumping && this.isFalling()) {
+            this.jumping = false;
         }
     }
 
@@ -145,20 +157,17 @@ class Character extends MovableObject {
     }
 
     charge() {
-        setInterval(() => {
-            if (this.world.keyboard.CHARGE && this.charges > 0 && !this.isDead() && this.isTimePassed(200, this.lastCharge)) {
-                let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
-                this.world.throwableObjects.push(charges);
-                this.charges -= 20;
-                this.world.statusText[1].setPercentage(this.charges);
-                this.lastCharge = new Date().getTime();
-            }
-        }, 50);
+        // setInterval(() => {
+        if (this.world.keyboard.CHARGE && this.charges > 0 && !this.isDead() && this.isTimePassed(200, this.lastCharge)) {
+            let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
+            this.world.throwableObjects.push(charges);
+            this.charges -= 20;
+            this.world.statusText[1].setPercentage(this.charges);
+            this.lastCharge = new Date().getTime();
+        }
+        // }, 50);
     }
-
-
-
-
+    
 
     updateHitbox() {
         this.hitbox.x = this.x + 52;

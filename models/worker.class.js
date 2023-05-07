@@ -11,12 +11,8 @@ class Worker extends Enemies {
         height: 60,
     }
 
-    velocityRunX = 0.8;
-    velocityWalkX = 0.4;
-
-    walkRangeX = 200;
-    attackRangeX = 100;
-    idleRangeX = 15;
+    velocityRunX = 1;
+    velocityWalkX = 0.6;
 
     idle_images = 'img/04_enemies/Worker/Idle.png'
     attack_images = 'img/04_enemies/Worker/Attack8.png'
@@ -26,8 +22,8 @@ class Worker extends Enemies {
     amountAttackImages = 6;
     amountWalkImages = 6;
 
-    walking_sound = new Audio('audio/walking_enemies/walk.mp3');
-    running_sound = new Audio('audio/walking_enemies/run.mp3');
+    walking_sound = new Audio('audio/enemies/walk_run/walk.mp3');
+    running_sound = new Audio('audio/enemies/walk_run/run.mp3');
 
     constructor(enemieID, x, y, otherDirection) {
         super().switchSprite(this.idle_images, this.amountIdleImages, 25);
@@ -40,7 +36,7 @@ class Worker extends Enemies {
         this.otherDirection = otherDirection;
 
         setTimeout(() => {
-            this.walk();
+            this.startAnimations = true;
         }, 1000);
     }
 

@@ -69,7 +69,7 @@ class DrawableObject {
 
         this.updateFrames();
     }
- 
+
     updateFrames() {
         this.elapsedFrames++;
         if (this.elapsedFrames % this.frameBuffer === 0) {
@@ -83,31 +83,39 @@ class DrawableObject {
 
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper || this instanceof ThrowableObject) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'blue';
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
-        if(this instanceof CollisionBlock){
+        if (this instanceof CollisionBlock) {
             world.collisionBlocks.forEach(collisionBlock => {
                 ctx.beginPath();
                 ctx.fillStyle = 'rgba(255, 0, 0 , 0.5)'
                 ctx.fillRect(collisionBlock.x, collisionBlock.y, collisionBlock.width, collisionBlock.height)
                 ctx.stroke();
             })
-            
+
         }
     }
 
     drawFrameHitbox(ctx) {
-        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper) {
+        if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper || this instanceof ThrowableObject) {
             ctx.beginPath();
             ctx.lineWidth = '2';
             ctx.strokeStyle = 'red';
             ctx.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
             ctx.stroke();
+
+            if (this instanceof Endboss) {
+                ctx.beginPath();
+                ctx.lineWidth = '2';
+                ctx.strokeStyle = 'red';
+                ctx.rect(this.hitboxAttack.x, this.hitboxAttack.y, this.hitboxAttack.width, this.hitboxAttack.height);
+                ctx.stroke();
+            }
         }
     }
 

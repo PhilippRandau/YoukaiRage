@@ -4,6 +4,13 @@ class ThrowableObject extends MovableObject {
     yAnimationOffset;
     hit;
     chargeShoot;
+
+    offset = {
+        x: 7,
+        y: 7,
+        width: 10,
+        height: 10,
+    }
     constructor(x, y, otherDirectionCharge) {
         super().loadImage('img/03_character_youkai/Charge_2.png');
         this.frameRate = 4;
@@ -13,6 +20,10 @@ class ThrowableObject extends MovableObject {
         this.animate();
         this.startPositionX = this.x;
         this.yAnimationOffset = this.y - 25;
+    }
+
+    update() {
+        this.updateHitbox();
     }
 
 
@@ -36,7 +47,7 @@ class ThrowableObject extends MovableObject {
     }
 
     animate() {
-        
+
         let intervalAnimation = setInterval(() => {
             let distance = this.x - this.startPositionX;
             if (distance > 800 || this.hit) {

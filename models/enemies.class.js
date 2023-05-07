@@ -2,7 +2,7 @@ class Enemies extends MovableObject {
 
     intervalAnimation;
     intervalWalk;
-    // world;
+    startAnimations = false;
     GHOST_IMAGES = [
         'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost1.png',
         'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost2.png',
@@ -24,62 +24,64 @@ class Enemies extends MovableObject {
         'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost18.png',
     ];
 
-    
+    walkRangeX = 250;
+    attackRangeX = 150;
+    idleRangeX = 15;
+
+    bufferAttackImages = 10;
+    bufferWalkImages = 15;
+    bufferIdleImages = 15;
+    bufferHurtImages = 20;
+
+    amountDeathImages = 18;
+
+    update() {
+        if (this.startAnimations) {
+            this.walk();
+        }
+    }
+
+
     walk() {
-        setInterval(() => {
-            clearInterval(this.intervalWalk);
-            if (!this.isDead()) {
-                if (this.isHurt()) {
-                    if (this instanceof MechWorker || this instanceof Dumper) {
-                        this.switchSprite(this.hurt_images, this.amountHurtImages, 30);
-                    }
-                }else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
-                    this.enemyIdle();
-                } else if (this.inRangeXRight(this.attackRangeX)) {
-                    this.enemyAttackOtherDirection(false);
-                } else if (this.inRangeXLeft(this.attackRangeX)) {
-                    this.enemyAttackOtherDirection(true);
-                } else if (this.inRangeXRight(this.walkRangeX)) {
-                    this.enemyWalkOtherDirection(false);
-                } else if (this.inRangeXLeft(this.walkRangeX)) {
-                    this.enemyWalkOtherDirection(true);
-                } else {
-                    this.enemyIdle();
-                }
-                clearInterval(this.intervalAnimation);
-                this.animationDead();
+        clearInterval(this.intervalWalk);
+        if (!this.isDead()) {
+            if (this.isHurt() && (this instanceof MechWorker || this instanceof Dumper)) {
+                this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
+            } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
+                this.enemyIdle();
+            } else if (this.inRangeXRight(this.attackRangeX)) {
+                this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+            } else if (this.inRangeXLeft(this.attackRangeX)) {
+                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages,this.running_sound);
+            } else if (this.inRangeXRight(this.walkRangeX)) {
+                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages,this.walking_sound);
+            } else if (this.inRangeXLeft(this.walkRangeX)) {
+                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages,this.walking_sound);
+            } else {
+                this.enemyIdle();
             }
-        }, 100);
+            clearInterval(this.intervalAnimation);
+            this.animationDead();
+        }
     }
 
 
     enemyIdle() {
-        this.switchSprite(this.idle_images, this.amountIdleImages, 25);
+        this.switchSprite(this.idle_images, this.amountIdleImages, this.bufferIdleImages);
         this.pauseSounds();
     }
 
 
-    enemyAttackOtherDirection(otherDirection) {
-        otherDirection ? this.velocityX = -this.velocityRunX : this.velocityX = this.velocityRunX;
+
+    enemyMove(otherDirection, velocityX, images, amountImages, bufferImages, sound) {
+        otherDirection ? this.velocityX = -velocityX : this.velocityX = velocityX;
         this.otherDirection = otherDirection;
-        this.switchSprite(this.attack_images, this.amountAttackImages, 15);
-        this.intervalWalk = setInterval(() => {
+        this.switchSprite(images, amountImages, bufferImages);
+        // this.intervalWalk = setInterval(() => {
             this.x += this.velocityX;
             this.pauseSounds();
-            this.playSound(this.running_sound);
-        }, 1000 / 120);
-    }
-
-
-    enemyWalkOtherDirection(otherDirection) {
-        otherDirection ? this.velocityX = -this.velocityWalkX : this.velocityX = this.velocityWalkX;
-        this.otherDirection = otherDirection;
-        this.switchSprite(this.walk_images, this.amountWalkImages, 25);
-        this.intervalWalk = setInterval(() => {
-            this.x += this.velocityX;
-            this.pauseSounds();
-            this.playSound(this.walking_sound);
-        }, 1000 / 120);
+            this.playSound(sound);
+        // }, 1000 / 120);
     }
 
 
@@ -93,7 +95,6 @@ class Enemies extends MovableObject {
         if (this.world.audio) {
             sound.play();
         }
-
     }
 
 
@@ -106,7 +107,7 @@ class Enemies extends MovableObject {
                 clearInterval(this.intervalWalk);
                 this.offsetCenterIMG = -30;
                 this.offset.height = 90;
-                if (this.currentImage > 18) {
+                if (this.currentImage > this.amountDeathImages) {
                     clearInterval(this.intervalAnimation);
                     delete this.world.level.enemies[this.enemieID];
                 }

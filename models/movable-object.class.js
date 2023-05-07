@@ -40,12 +40,13 @@ class MovableObject extends DrawableObject {
         if (this.y + this.height > canvas.height && this.energy > 0) {
             this.instantDeath();
         }
+        
 
     }
 
 
-    isAboveGround() {
-        return this.velocityY !== 0;
+    isOnGround() {
+        return this.velocityY === 0;
     }
 
 
@@ -126,6 +127,19 @@ class MovableObject extends DrawableObject {
         this.hitbox.y = this.y + this.offset.y;
         this.hitbox.width = this.offset.width;
         this.hitbox.height = this.offset.height;
+
+        
+        if (this instanceof Endboss) {
+            if (!this.otherDirection) {
+                this.hitboxAttack.x = this.hitbox.x + this.hitbox.width;
+            }else{
+                this.hitboxAttack.x = this.x + this.offsetAttack.x;
+            }
+            this.hitboxAttack.y = this.y + this.offsetAttack.y;
+            this.hitboxAttack.width = this.offsetAttack.width;
+            this.hitboxAttack.height = this.offsetAttack.height;
+        
+        }
     }
 
 

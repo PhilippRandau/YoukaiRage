@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YoukaiRage</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
+    <script src="models/character.class.js"></script>
     <script src="models/enemies.class.js"></script>
     <script src="models/tile.class.js"></script>
     <script src="models/collisionBlock.class.js"></script>
     <script src="models/collectible.class.js"></script>
-    <script src="models/character.class.js"></script>
     <script src="models/mechworker.class.js"></script>
     <script src="models/worker.class.js"></script>
     <script src="models/dumper.class.js"></script>
@@ -30,17 +30,34 @@
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="levels/data/collisions.js"></script>
-    <!-- <script src="models/collidable.class.js"></script> -->
     <script src="js/game.js"></script>
-    
-    
+
+
 </head>
 
 <body onload="init()">
     <h1>Youkai Rage</h1>
+    <div class="menu">
+        <button class="mute-button" onclick="toggleSound()"><img id="toggleSoundImg" src="img/09_GUI/mute-3-32.png"
+                alt=""></button>
+    </div>
 
 
     <canvas id="canvas" width="720px" height="480px"></canvas>
+
+    <div class="gui-movement">
+        <div class="movement">
+            <button class="move-left" id="moveLeft"><img src="img/09_GUI/arrow.png" alt="arrow left"></button>
+            <button class="move-right" id="moveRight"><img src="img/09_GUI/arrow.png" alt="arrow right"></button>
+        </div>
+        <div class="info">
+            <span>W / Arrow UP / Space = Jump</span>
+        </div>
+        <div class="movement">
+            <button class="move-jump" id="moveJump"><img src="img/09_GUI/arrow.png" alt="arrow up"></button>
+            <button class="shoot" id="shoot"><img src="img/09_GUI/shoot.png" alt="arrow shoot"></button>
+        </div>
+    </div>
 </body>
 
 

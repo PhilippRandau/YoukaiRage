@@ -40,7 +40,7 @@ class MovableObject extends DrawableObject {
         if (this.y + this.height > canvas.height && this.energy > 0) {
             this.instantDeath();
         }
-        
+
 
     }
 
@@ -52,13 +52,22 @@ class MovableObject extends DrawableObject {
 
 
 
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-    }
+    // playAnimation(images) {
+    //     let i = this.currentImage % images.length;
+    //     let path = images[i];
+    //     this.img = this.imageCache[path];
+    //     this.currentImage++;
+    // }
 
+    playAnimation(images, framesPerImage) {
+        if (!this.animationCounter || this.animationCounter >= framesPerImage) {
+            this.animationCounter = 0;
+            this.currentImage = (this.currentImage + 1) % images.length;
+            let path = images[this.currentImage];
+            this.img = this.imageCache[path];
+        }
+        this.animationCounter++;
+    }
 
 
 
@@ -70,10 +79,10 @@ class MovableObject extends DrawableObject {
     }
 
     instantDeath() {
-            this.energy = 0;
-            if (this instanceof Character) {
-                this.world.statusText[0].setPercentage(this.energy);
-            }
+        this.energy = 0;
+        if (this instanceof Character) {
+            this.world.statusText[0].setPercentage(this.energy);
+        }
     }
 
 
@@ -98,7 +107,8 @@ class MovableObject extends DrawableObject {
             this.world.statusText[3].setPercentage(this.energy);
             this.addPoints(50);
         }
-
+        this.hurt_sound.currentTime = 0;
+        this.playSound(this.hurt_sound);
     }
 
     addPoints(amount) {
@@ -116,6 +126,12 @@ class MovableObject extends DrawableObject {
     }
 
 
+    playSound(sound) {
+        if (this.world.audio) {
+            sound.play();
+        }
+    }
+
 
 
     updateHitbox() {
@@ -128,17 +144,17 @@ class MovableObject extends DrawableObject {
         this.hitbox.width = this.offset.width;
         this.hitbox.height = this.offset.height;
 
-        
+
         if (this instanceof Endboss) {
             if (!this.otherDirection) {
                 this.hitboxAttack.x = this.hitbox.x + this.hitbox.width;
-            }else{
+            } else {
                 this.hitboxAttack.x = this.x + this.offsetAttack.x;
             }
             this.hitboxAttack.y = this.y + this.offsetAttack.y;
             this.hitboxAttack.width = this.offsetAttack.width;
             this.hitboxAttack.height = this.offsetAttack.height;
-        
+
         }
     }
 

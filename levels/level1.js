@@ -44,7 +44,7 @@ const level1 = new Level(
         new Dumper(11, 980, 250, true),
         new Dumper(12, 1657, 250, true),
         new Dumper(13, 2696, 250, true),
-        new MechWorker(14, 1962, 125, true),
+        new MechWorker(14, 1962, 125, true),//1962
         new MechWorker(15, 3429, 250, true),
         new MechWorker(16, 4080, 250, true),
         new MechWorker(17, 4658, 250, true),

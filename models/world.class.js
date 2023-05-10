@@ -30,12 +30,12 @@ class World {
     statusText = [
         new StatusText(30, 35, 50, 50, 'Health', 100, 35, 100, 'lightgreen'),
         new StatusText(30, 65, 640, 50, 'Charge', 100, 65, 100, 'red'),
-        new StatusText(550, 45, 640, 50, 'Points', 660, 45, 0, 'yellow'),
+        new StatusText(550, 45, 640, 50, 'Points', 640, 45, 0, 'yellow'),
         new StatusText(240, 52, 640, 50, 'Boss Health', 435, 52, 100, 'white'),
     ];
     throwableObjects = [];
     tileCollisions2D = [];
-    audio = true;
+    audio = false;
     background_Sound_Outside = new Audio('audio/background/backgroundSoundEffectOutside.mp3');
     background_Sound_EnemyBase = new Audio('audio/background/backgroundSoundEffectEnemieBase.mp3');
 
@@ -44,8 +44,9 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.worldGeneration();
-        this.update();
         this.setWorld();
+        this.update();
+        
 
         this.characterInteractions();
 
@@ -64,6 +65,8 @@ class World {
         this.playBackgroundEffects();
 
         this.updateFunctions();
+
+        this.setWorldThrowableObjects();
 
         this.lastUpdateTime = currentTime;
 
@@ -106,6 +109,9 @@ class World {
             } else {
                 this.background_Sound_Outside.play();
             }
+        } else {
+            this.background_Sound_Outside.pause();
+            this.background_Sound_EnemyBase.pause();
         }
     }
 
@@ -135,6 +141,13 @@ class World {
         });
         this.collectibles.forEach(collectible => {
             collectible.world = this;
+        });
+
+    }
+
+    setWorldThrowableObjects() {
+        this.throwableObjects.forEach(throwableObject => {
+            throwableObject.world = this;
         });
     }
 

@@ -8,11 +8,15 @@ class Character extends MovableObject {
     modifiedHitboxHeight = 55;
     lastCall;
     enemieHit;
+    previousCharacterInteraction = false;
     characterInteraction = false;
 
 
-    // walking_sound = new Audio('audio/walk.mp3');
-    firstAnimation;
+    dying_sound = new Audio('audio/youkai/dying.mp3');
+    hurt_sound = new Audio('audio/youkai/hurt.mp3');
+    jump_sound = new Audio('audio/youkai/jump.mp3');
+    scream_ghost = new Audio('audio/youkai/scream_ghost.mp3');
+    charge_shoot = new Audio('audio/youkai/charge.mp3');
 
     GHOST_BOTTLE = [
         'img/05_Effects/ghost_bottle/ghost_bottle1.png',
@@ -25,26 +29,8 @@ class Character extends MovableObject {
         super().loadImage('img/05_Effects/ghost_bottle/ghost_bottle1.png');
         this.loadImages(this.GHOST_BOTTLE);
         this.introAnimation();
-    }
 
-    update() {
-        if (this.characterInteraction) {
-            this.setCameraFocus();
-            this.interactions();
-            this.animate();
-        }
-    }
-
-
-
-    introAnimation() {
-        this.firstAnimation = setInterval(() => {
-            this.playAnimation(this.GHOST_BOTTLE);
-            this.frameRate = 1;
-
-        }, 300);
         setTimeout(() => {
-            clearInterval(this.firstAnimation);
             this.characterInteraction = true;
             this.y = 280;
             this.x = -456;//-456
@@ -52,23 +38,54 @@ class Character extends MovableObject {
             this.modifiedHitboxHeight = 70;
             this.velocityX = 4;
             this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
-        },200);//1500
+
+        }, 1500);//1500
+    }
+
+    update() {
+        this.introAnimation();
+        if (this.characterInteraction) {
+            this.setCameraFocus();
+            this.interactions();
+            this.animate();
+            this.resetJumpSound();
+            
+        }
+        if (this.characterInteraction != this.previousCharacterInteraction) {
+            this.playSound(this.scream_ghost);
+        }
+        this.previousCharacterInteraction = this.characterInteraction;
+    }
+
+    resetJumpSound() {
+        if (this.velocityY == -4) {
+            this.jump_sound.currentTime = 0;
+        }
+    }
+
+    introAnimation() {
+        if (!this.characterInteraction) {
+            this.playAnimation(this.GHOST_BOTTLE, 55);
+            this.frameRate = 1;
+        }
     }
 
 
 
 
     animate() {
-        // setInterval(() => {
         if (this.isDead()) {
             this.switchSprite('img/03_character_youkai/Dead.png', 4, 15);
+            this.playSound(this.dying_sound);
         } else if (this.isHurt()) {
+            // this.playSound(this.hurt_sound);
             this.switchSprite('img/03_character_youkai/Hurt.png', 3, 15);
             this.lastCall = new Date().getTime();
         } else if (this.world.keyboard.CHARGE && this.charges > 0) {
-            this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 5);
+            this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 15);
             this.lastCall = new Date().getTime();
         } else if (this.isFalling() || this.jumping) {
+            this.playSound(this.jump_sound);
             this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
             this.lastCall = new Date().getTime();
         } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && (!this.jumping && !this.isFalling())) {
@@ -77,9 +94,20 @@ class Character extends MovableObject {
         } else if (this.isBored()) {
             this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
         } else {
-            this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
+            // this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
+            this.pauseSounds()
         }
-        // }, 50);
+    }
+
+    pauseSounds() {
+        // this.walking_sound.pause();
+        // this.running_sound.pause();
+        // this.idle_sound.pause();
+        this.dying_sound.pause();
+        this.hurt_sound.pause();
+        this.hurt_sound.currentTime = 0;
+        this.jump_sound.pause();
+        this.jump_sound.currentTime = 0;
 
     }
 
@@ -99,24 +127,19 @@ class Character extends MovableObject {
     interactions() {
         this.walk();
         this.charge();
-        // setInterval(() => {
         this.jump();
-        // }, 1000 / 144);
     }
 
     walk() {
-        // setInterval(() => {
         if (!this.isDead()) {
-            // this.walking_sound.pause();
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x_right) {
                 this.walkRight();
             } else if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x_left) {
                 this.walkLeft();
             }
         }
-        // this.setCameraFocus();
-        // }, 1000 / 120);
     }
+
 
     setCameraFocus() {
         this.world.camera_x = -this.x + 50;
@@ -157,7 +180,6 @@ class Character extends MovableObject {
     }
 
     charge() {
-        // setInterval(() => {
         if (this.world.keyboard.CHARGE && this.charges > 0 && !this.isDead() && this.isTimePassed(200, this.lastCharge)) {
             let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
             this.world.throwableObjects.push(charges);
@@ -165,9 +187,8 @@ class Character extends MovableObject {
             this.world.statusText[1].setPercentage(this.charges);
             this.lastCharge = new Date().getTime();
         }
-        // }, 50);
     }
-    
+
 
     updateHitbox() {
         this.hitbox.x = this.x + 52;

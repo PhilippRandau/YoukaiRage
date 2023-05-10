@@ -23,8 +23,10 @@ class Dumper extends Enemies {
     amountWalkImages = 4;
     amountHurtImages = 2;
 
-    walking_sound = new Audio('audio/enemies/walk_run/walk.mp3');
-    running_sound = new Audio('audio/enemies/walk_run/run.mp3');
+    walking_sound = new Audio('audio/enemies/dumper/walk.mp3');
+    running_sound = new Audio('audio/enemies/dumper/attack.mp3');
+    idle_sound = new Audio('audio/enemies/dumper/idle_range.mp3');
+    hurt_sound = new Audio('audio/enemies/dumper/hurt.mp3');
 
 
     constructor(enemieID, x, y, otherDirection) {

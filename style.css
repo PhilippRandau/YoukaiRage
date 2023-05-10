@@ -1,4 +1,5 @@
 body {
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,6 +29,78 @@ canvas {
   display: block;
 }
 
+.menu {
+  display: flex;
+  justify-content: flex-end;
+  width: 720px;
+  position: relative;
+  top: 45px;
+  right: 5px;
+  margin-top: -35px;
+}
+
+.mute-button {
+  background-color: #38002C;
+  border: 1px solid #38002C;
+  border-radius: 10px;
+  padding: 5px 5px;
+}
+
+.mute-button:hover {
+  cursor: pointer;
+  background-color: #44183b;
+}
+
+.mute-button img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  object-fit: contain;
+}
+
+.gui-movement {
+  display: flex;
+  justify-content: space-between;
+  width: 700px;
+  margin: 10px;
+  margin-bottom: -50px;
+}
+
+.gui-movement button {
+  background-color: #38002C;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movement {
+  display: flex;
+  justify-content: space-between;
+  width: 90px;
+}
+
+.info{
+  color: white;
+}
+
+.gui-movement img {
+  width: 24px;
+}
+
+.move-left img {
+  transform: rotate(180deg);
+}
+
+.move-jump img {
+  transform: rotate(-90deg);
+}
+
+
+
 @font-face {
   font-family: "PixelGothic";
   src: url("fonts/Straight pixel gothic.otf");
@@ -38,10 +111,33 @@ canvas {
   canvas {
     width: 100%;
   }
+
+  .menu {
+    width: 100%;
+  }
+
+  .gui-movement {
+    width: 100%;
+  }
+
+  h1 {
+    position: absolute;
+    margin-block-start: unset;
+    margin-block-end: unset;
+    display: none;
+  }
+
 }
 
 @media only screen and (max-height: 480px) {
   canvas {
     height: 100vh;
+  }
+
+  h1 {
+    position: absolute;
+    margin-block-start: unset;
+    margin-block-end: unset;
+    display: none;
   }
 }

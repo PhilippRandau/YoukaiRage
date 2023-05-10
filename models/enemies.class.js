@@ -1,7 +1,6 @@
 class Enemies extends MovableObject {
 
     intervalAnimation;
-    intervalWalk;
     startAnimations = false;
     GHOST_IMAGES = [
         'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost1.png',
@@ -24,16 +23,22 @@ class Enemies extends MovableObject {
         'img/05_Effects/Smoke/Smoke_ghost/Smoke_ghost18.png',
     ];
 
+    walking_sound = new Audio('audio/enemies/dumper/walk.mp3');
+    running_sound = new Audio('audio/enemies/dumper/attack.mp3');
+    idle_sound = new Audio('audio/enemies/dumper/attack.mp3');
+    ghost_sound = new Audio('audio/enemies/ghost.mp3');
+
     walkRangeX = 250;
     attackRangeX = 150;
     idleRangeX = 15;
+    soundRangeX = 400;
 
     bufferAttackImages = 10;
     bufferWalkImages = 15;
     bufferIdleImages = 15;
     bufferHurtImages = 20;
 
-    amountDeathImages = 18;
+    amountDeathImages = 16;
 
     update() {
         if (this.startAnimations) {
@@ -43,25 +48,32 @@ class Enemies extends MovableObject {
 
 
     walk() {
-        clearInterval(this.intervalWalk);
         if (!this.isDead()) {
             if (this.isHurt() && (this instanceof MechWorker || this instanceof Dumper)) {
                 this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
             } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
                 this.enemyIdle();
+                this.playSound(this.idle_sound);
             } else if (this.inRangeXRight(this.attackRangeX)) {
                 this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
             } else if (this.inRangeXLeft(this.attackRangeX)) {
-                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages,this.running_sound);
+                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
             } else if (this.inRangeXRight(this.walkRangeX)) {
-                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages,this.walking_sound);
+                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else if (this.inRangeXLeft(this.walkRangeX)) {
-                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages,this.walking_sound);
+                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+            } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
+                this.enemyIdle();
+                this.playSound(this.idle_sound);
+
             } else {
                 this.enemyIdle();
+                this.pauseSounds();
             }
-            clearInterval(this.intervalAnimation);
+
+        } else {
             this.animationDead();
+            this.playSound(this.ghost_sound);
         }
     }
 
@@ -77,42 +89,34 @@ class Enemies extends MovableObject {
         otherDirection ? this.velocityX = -velocityX : this.velocityX = velocityX;
         this.otherDirection = otherDirection;
         this.switchSprite(images, amountImages, bufferImages);
-        // this.intervalWalk = setInterval(() => {
-            this.x += this.velocityX;
-            this.pauseSounds();
-            this.playSound(sound);
-        // }, 1000 / 120);
+        this.x += this.velocityX;
+        this.pauseSounds();
+        this.playSound(sound);
     }
 
 
     pauseSounds() {
         this.walking_sound.pause();
         this.running_sound.pause();
+        this.idle_sound.pause();
     }
 
 
-    playSound(sound) {
-        if (this.world.audio) {
-            sound.play();
-        }
-    }
+
 
 
     animationDead() {
-        this.intervalAnimation = setInterval(() => {
-            if (this.isDead()) {
+        if (this.isDead()) {
+            // this.pauseSounds();
+            this.playAnimation(this.GHOST_IMAGES, 8);
+            this.frameRate = 1;
+            this.offsetCenterIMG = -30;
+            if (this.currentImage > this.amountDeathImages) {
                 this.pauseSounds();
-                this.playAnimation(this.GHOST_IMAGES);
-                this.frameRate = 1;
-                clearInterval(this.intervalWalk);
-                this.offsetCenterIMG = -30;
-                this.offset.height = 90;
-                if (this.currentImage > this.amountDeathImages) {
-                    clearInterval(this.intervalAnimation);
-                    delete this.world.level.enemies[this.enemieID];
-                }
+                delete this.world.level.enemies[this.enemieID];
             }
-        }, 100);
+        }
+
     }
 
 

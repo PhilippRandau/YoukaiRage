@@ -4,6 +4,9 @@ class ThrowableObject extends MovableObject {
     yAnimationOffset;
     hit;
     chargeShoot;
+    world;
+    charge_fly = new Audio('audio/youkai/charge_fly.mp3');
+    charge_explosion = new Audio('audio/youkai/charge_explosion.mp3');
 
     offset = {
         x: 7,
@@ -24,6 +27,7 @@ class ThrowableObject extends MovableObject {
 
     update() {
         this.updateHitbox();
+        
     }
 
 
@@ -47,18 +51,21 @@ class ThrowableObject extends MovableObject {
     }
 
     animate() {
-
+        
         let intervalAnimation = setInterval(() => {
             let distance = this.x - this.startPositionX;
+            this.playSound(this.charge_fly);
             if (distance > 800 || this.hit) {
                 this.offsetCenterIMG = -30;
                 this.y = this.yAnimationOffset;
                 clearInterval(this.chargeShoot);
                 this.switchSprite('img/05_Effects/Magic/4_2.png', 4, 15);
                 if (this.currentFrame == 3) {
+                    this.playSound(this.charge_explosion);
+                    this.charge_fly.pause();
                     clearInterval(intervalAnimation);
                     setTimeout(() => {
-                        world.throwableObjects.splice(world.throwableObjects.indexOf(this), 1);
+                        this.world.throwableObjects.splice(this.world.throwableObjects.indexOf(this), 1);
                     }, 50);
                 }
             }

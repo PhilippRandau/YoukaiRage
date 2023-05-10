@@ -24,6 +24,10 @@ class Worker extends Enemies {
 
     walking_sound = new Audio('audio/enemies/walk_run/walk.mp3');
     running_sound = new Audio('audio/enemies/walk_run/run.mp3');
+    idle_sound = new Audio('audio/enemies/worker/talk.mp3');
+    hurt_sound = new Audio('audio/enemies/worker/hurt.mp3');
+    
+    
 
     constructor(enemieID, x, y, otherDirection) {
         super().switchSprite(this.idle_images, this.amountIdleImages, 25);

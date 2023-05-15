@@ -10,8 +10,8 @@ class Dumper extends Enemies {
         height: 60,
     }
 
-    velocityRunX = 1.2;
-    velocityWalkX = 0.6;
+    velocityRunX = 1.8;
+    velocityWalkX = 1.3;
 
     idle_images = 'img/04_enemies/Dumper/Idle.png'
     attack_images = 'img/04_enemies/Dumper/Attack3.png'

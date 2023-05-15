@@ -36,27 +36,57 @@
 </head>
 
 <body onload="init()">
-    <h1>Youkai Rage</h1>
-    <div class="menu">
+    <h1 class="header hide-mobile">Youkai Rage</h1>
+    <div class="menu" id="menu">
         <button class="mute-button" onclick="toggleSound()"><img id="toggleSoundImg" src="img/09_GUI/mute-3-32.png"
                 alt=""></button>
+
     </div>
 
 
-    <canvas id="canvas" width="720px" height="480px"></canvas>
+    <canvas class="d-none" id="canvas" width="720px" height="480px"></canvas>
 
-    <div class="gui-movement">
+    <div id="introScreen" class="intro-screen">
+        <div class="title-text">
+            <h1>Youkai</h1>
+            <h1>Rage</h1>
+        </div>
+
+        <button class="play-button" onclick="play()">
+            <img src="img/09_GUI/intro/Play_Large.png" alt="play">
+        </button>
+    </div>
+
+    <div id="outroScreen" class="outro-screen d-none">
+        <div class="title-text-end">
+            <h1>Game</h1>
+            <h1>Over!</h1>
+        </div>
+        <button class="play-button" onclick="reloadWorld()">
+            <img src="img/09_GUI/outtro/Reload.png" alt="play">
+        </button>
+    </div>
+
+    <div class="gui-movement only-mobile">
         <div class="movement">
             <button class="move-left" id="moveLeft"><img src="img/09_GUI/arrow.png" alt="arrow left"></button>
             <button class="move-right" id="moveRight"><img src="img/09_GUI/arrow.png" alt="arrow right"></button>
-        </div>
-        <div class="info">
-            <span>W / Arrow UP / Space = Jump</span>
         </div>
         <div class="movement">
             <button class="move-jump" id="moveJump"><img src="img/09_GUI/arrow.png" alt="arrow up"></button>
             <button class="shoot" id="shoot"><img src="img/09_GUI/shoot.png" alt="arrow shoot"></button>
         </div>
+    </div>
+
+    <div class="info">
+        <div>
+            <h2>Control's</h2>
+            <span>W / Arrow UP / Space = Jump</span>
+            <span>A / Arrow UP = Walk Left</span>
+            <span>D / Arrow Right = Walk Right</span>
+            <span>E = Shoot</span>
+        </div>
+        <button class="mute-button">OK!</button>
     </div>
 </body>
 

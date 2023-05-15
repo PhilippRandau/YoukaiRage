@@ -11,8 +11,8 @@ class Worker extends Enemies {
         height: 60,
     }
 
-    velocityRunX = 1;
-    velocityWalkX = 0.6;
+    velocityRunX = 2;
+    velocityWalkX = 0.9;
 
     idle_images = 'img/04_enemies/Worker/Idle.png'
     attack_images = 'img/04_enemies/Worker/Attack8.png'

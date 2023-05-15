@@ -1,11 +1,9 @@
 class MovableObject extends DrawableObject {
     enemieID;
-    // speed = 0.2;
     otherDirection = false;
-    // direction = '';
     velocityX = 0;
     velocityY = 1;
-    gravity = 0.02;
+    gravity = 0.02;//0.02
     energy = 100;
     lastHit = 0;
     previousImg;
@@ -127,7 +125,7 @@ class MovableObject extends DrawableObject {
 
 
     playSound(sound) {
-        if (this.world.audio) {
+        if (audio) {
             sound.play();
         }
     }

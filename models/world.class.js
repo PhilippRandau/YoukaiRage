@@ -1,6 +1,11 @@
 class World {
-    UPDATE_INTERVAL = 1000 / 60; // 60 FPS
+    gameStarted = false;
+    UPDATE_INTERVAL = 1000 / 30;
+    UPDATE_INTERVAL_DRAW = 1000 / 30;
     lastUpdateTime = Date.now();
+    lastUpdateTimeDraw = Date.now();
+    lastUpdateCollisions = Date.now();
+
     backgroundObjects = level1.backgroundObjects;
     character = new Character();
     enemies = level1.enemies;
@@ -33,63 +38,150 @@ class World {
         new StatusText(550, 45, 640, 50, 'Points', 640, 45, 0, 'yellow'),
         new StatusText(240, 52, 640, 50, 'Boss Health', 435, 52, 100, 'white'),
     ];
+
+
+
     throwableObjects = [];
     tileCollisions2D = [];
-    audio = false;
+
     background_Sound_Outside = new Audio('audio/background/backgroundSoundEffectOutside.mp3');
     background_Sound_EnemyBase = new Audio('audio/background/backgroundSoundEffectEnemieBase.mp3');
+
+    frameCount = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.gameStarted = true;
         this.worldGeneration();
         this.setWorld();
         this.update();
-        
+        this.updateDraw();
+        this.updateCheckforBlockCollisionsEnemies();
 
-        this.characterInteractions();
+    }
 
+    reset() {
+        let audioElements = document.getElementsByTagName("audio");
+        for (let i = 0; i < audioElements.length; i++) {
+            audioElements[i].stop();
+        }
+
+
+        this.collectibles.splice(0,this.collectibles.length);
+        this.enemies.splice(0,this.enemies.length);
+        this.collisionBlocks.splice(0,this.collisionBlocks.length);
+
+
+        this.camera_x = 506.01;
+        delete this.character;
+        this.character = new Character();
+
+
+        this.enemies.push(
+            new Worker(0, -538, 250, false),
+            new Worker(1, -386, 250, true),
+            new Worker(2, 15, 250, true),
+            new Worker(3, 210, 250, false),
+            new Worker(4, 260, 250, true),
+            new Worker(5, 487, 250, true),
+            new Worker(6, 722, 250, true),
+            new Worker(7, 2800, 250, false),
+            new Worker(8, 2850, 250, true),
+            new Worker(9, 5421, 230, true),
+            new Dumper(10, -161, 250, true),
+            new Dumper(11, 980, 250, true),
+            new Dumper(12, 1657, 250, true),
+            new Dumper(13, 2696, 250, true),
+            new MechWorker(14, 1962, 125, true),
+            new MechWorker(15, 3429, 250, true),
+            new MechWorker(16, 4080, 250, true),
+            new MechWorker(17, 4658, 250, true),
+            new Endboss(18, 6800, 250, true),
+        );
+
+
+        this.collectibles.push(
+            new Collectible(0, -150, 60),
+            new Collectible(1, -120, 60),
+            new Collectible(2, -90, 60),
+            new Collectible(3, -60, 60),
+            new Collectible(4, 130, 120),
+            new Collectible(5, 160, 120),
+            new Collectible(6, 870, 120),
+            new Collectible(7, 900, 120),
+            new Collectible(8, 930, 120),
+            new Collectible(9, 2785, 90),
+            new Collectible(10, 2755, 90),
+            new Collectible(11, 2725, 90),
+            new Collectible(12, 2950, 90),
+            new Collectible(13, 3140, 90),
+            new Collectible(14, 3300, 180),
+            new Collectible(15, 5925, 280),
+            new Collectible(16, 5955, 280),
+            new Collectible(17, 6660, 160),
+            new Collectible(18, 6725, 160),
+            new Collectible(19, 7110, 420),
+            new Collectible(20, 7140, 420),
+            new Collectible(21, 7170, 420),
+        );
     }
 
     update() {
         const currentTime = Date.now();
         const elapsedTime = currentTime - this.lastUpdateTime;
 
-        this.draw();
-
         this.checkforBlockCollisionsCharacter();
 
-        this.checkforBlockCollisionsEnemies();
+        this.character.update();
 
         this.playBackgroundEffects();
 
-        this.updateFunctions();
 
-        this.setWorldThrowableObjects();
 
         this.lastUpdateTime = currentTime;
 
-        setTimeout(() => {
-            this.update();
-        }, this.UPDATE_INTERVAL - elapsedTime);
-
-        // let self = this;
-        // requestAnimationFrame(() => {
-        //     self.update();
-        // });
+        if (this.gameStarted) {
+            setTimeout(() => {
+                this.update();
+            }, this.UPDATE_INTERVAL - elapsedTime);
+        }
     }
 
-    updateFunctions() {
-        this.character.update();
+    updateDraw() {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - this.lastUpdateTimeDraw;
 
-        this.enemies.forEach(enemie => {
-            enemie.update();
-        });
+        this.draw();
 
-        this.throwableObjects.forEach(throwableObject => {
-            throwableObject.update();
-        })
+        this.lastUpdateTimeDraw = currentTime;
+        if (this.gameStarted) {
+            setTimeout(() => {
+                this.updateDraw();
+            }, this.UPDATE_INTERVAL_DRAW - elapsedTime);
+        }
+
+    }
+
+
+
+    updateCheckforBlockCollisionsEnemies() {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - this.lastUpdateCollisions;
+
+        this.checkforBlockCollisionsEnemies();
+
+        this.checkCollisions();
+
+        this.lastUpdateCollisions = currentTime;
+
+
+        if (this.gameStarted) {
+            setTimeout(() => {
+                this.updateCheckforBlockCollisionsEnemies();
+            }, this.UPDATE_INTERVAL_DRAW - elapsedTime);
+        }
     }
 
 
@@ -103,7 +195,7 @@ class World {
 
 
     playBackgroundEffects() {
-        if (this.audio) {
+        if (audio) {
             if (this.character.x > 3288) {
                 this.background_Sound_EnemyBase.play();
             } else {
@@ -122,7 +214,6 @@ class World {
     generateCollisionBlocks() {
         for (let i = 0; i < tileCollisions.length; i += 300) {
             this.tileCollisions2D.push(tileCollisions.slice(i, i + 300))
-
         }
 
         this.tileCollisions2D.forEach((row, y) => {
@@ -136,8 +227,8 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        this.enemies.forEach(enemie => {
-            enemie.world = this;
+        this.enemies.forEach(enemy => {
+            enemy.world = this;
         });
         this.collectibles.forEach(collectible => {
             collectible.world = this;
@@ -145,11 +236,7 @@ class World {
 
     }
 
-    setWorldThrowableObjects() {
-        this.throwableObjects.forEach(throwableObject => {
-            throwableObject.world = this;
-        });
-    }
+
 
     draw() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -231,15 +318,11 @@ class World {
         this.ctx.restore();
     }
 
-    characterInteractions() {
-        setInterval(() => {
-            this.checkCollisions();
-        }, 10);
-    }
 
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
+            enemy.update();
             if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && !this.character.isDead() && this.character.isFalling() && enemy.energy > 0) {
                 this.character.enemieHit = true;
                 enemy.hit();
@@ -252,17 +335,20 @@ class World {
             }
         });
 
-        let endboss = this.level.enemies[18];
 
-        if (endboss.isCollidingHitbox(endboss.hitboxAttack, this.character.hitbox) && this.character.energy > 0 && endboss.energy > 0 && endboss.isAttacking) {
-            if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
-                this.character.hit();
-                this.character.lastHitTime = Date.now();
+        if (this.enemies[18]) {
+            let endboss = this.enemies[18];
+            if (endboss.isCollidingHitbox(endboss.hitboxAttack, this.character.hitbox) && this.character.energy > 0 && endboss.energy > 0 && endboss.isAttacking) {
+                if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
+                    this.character.hit();
+                    this.character.lastHitTime = Date.now();
+                }
             }
         }
 
-
         this.throwableObjects.forEach((throwableObject) => {
+            throwableObject.update();
+            throwableObject.world = this;
             if (this.level.enemies[18].isCollidingHitbox(this.level.enemies[18].hitbox, throwableObject.hitbox) && this.level.enemies[18].energy > 0 && !throwableObject.hit) {
                 this.level.enemies[18].hit();
                 throwableObject.hit = true;
@@ -275,6 +361,9 @@ class World {
                 collectible.collect();
             }
         })
+
+
+
 
 
     }

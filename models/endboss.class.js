@@ -31,8 +31,9 @@ class Endboss extends Enemies {
         height: 12,
     }
 
-    velocityRunX = 0.8;
-    velocityWalkX = 0.4;
+    velocityRunX = 1.8;
+    velocityWalkX = 1.3;
+
 
     walkRangeX = 350;
     attackRangeX = 125;

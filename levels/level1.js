@@ -1,33 +1,14 @@
 const level1 = new Level(
     [
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', -719, 0),
-        // new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', -719, 0),
-        // new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', -719, 0),
-        // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', -719, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 0, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/stars.png', -100, 0),
-
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Bright/star.png', -100, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks2_half.png', -100, 220),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks3_half.png', -100, 220),
-        // new BackgroundObject('img/02_Tiles/Green Tiles.png', -800, 0),
-
-
-
-        // new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 0, 0),
-        // new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/stars.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Bright/star.png', 0, 0),
+        // new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks2_half.png', 200, 220),
+        // new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks3_half.png', 200, 220),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719, 0),
-        // new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', 719, 0),
-        // new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', 719, 0),
-        // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', 719, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719 * 2, 0),
-        // new BackgroundObject('../img/5_background/layers/3_third_layer/1.png', 719*2, 0),
-        // new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 719*2, 0),
-        // new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 719*2, 0),
         new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719 * 3, 0),
-        // new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', 719*3, 0),
-        // new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', 719*3, 0),
-        // new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', 719*3, 0),
     ],
     [
         new Worker(0, -538, 250, false),

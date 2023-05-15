@@ -37,9 +37,9 @@ class Character extends MovableObject {
             this.offsetCenterIMG = 2;
             this.modifiedHitboxHeight = 70;
             this.velocityX = 4;
-            this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
+            this.switchSprite('img/03_character_youkai/Scream.png', 4, 7);
 
-        }, 1500);//1500
+        }, 1500);
     }
 
     update() {
@@ -75,24 +75,25 @@ class Character extends MovableObject {
 
     animate() {
         if (this.isDead()) {
-            this.switchSprite('img/03_character_youkai/Dead.png', 4, 15);
+            this.switchSprite('img/03_character_youkai/Dead.png', 4, 7);
             this.playSound(this.dying_sound);
+            document.getElementById('outroScreen').classList.remove('d-none');
         } else if (this.isHurt()) {
             // this.playSound(this.hurt_sound);
-            this.switchSprite('img/03_character_youkai/Hurt.png', 3, 15);
+            this.switchSprite('img/03_character_youkai/Hurt.png', 3, 7);
             this.lastCall = new Date().getTime();
         } else if (this.world.keyboard.CHARGE && this.charges > 0) {
-            this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 15);
+            this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 7);
             this.lastCall = new Date().getTime();
         } else if (this.isFalling() || this.jumping) {
             this.playSound(this.jump_sound);
-            this.switchSprite('img/03_character_youkai/Scream.png', 4, 15);
+            this.switchSprite('img/03_character_youkai/Scream.png', 4, 7);
             this.lastCall = new Date().getTime();
         } else if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && (!this.jumping && !this.isFalling())) {
-            this.switchSprite('img/03_character_youkai/Walk.png', 5, 15);
+            this.switchSprite('img/03_character_youkai/Walk.png', 5, 7);
             this.lastCall = new Date().getTime();
         } else if (this.isBored()) {
-            this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
+            this.switchSprite('img/03_character_youkai/Idle.png', 5, 7);
         } else {
             // this.switchSprite('img/03_character_youkai/Idle.png', 5, 15);
             this.pauseSounds()
@@ -142,18 +143,23 @@ class Character extends MovableObject {
 
 
     setCameraFocus() {
-        this.world.camera_x = -this.x + 50;
+        try {
+            this.world.camera_x = -this.x + 50;
+        } catch (error) {
+            debugger;
+        }
+        
     }
 
     walkRight() {
-        this.velocityX = 1.5;
+        this.velocityX = 2.5;//1.5
         this.x += this.velocityX;
         this.otherDirection = false;
         // this.walking_sound.play();
     }
 
     walkLeft() {
-        this.velocityX = -1.5;
+        this.velocityX = -2.5;//-1.5
         this.x += this.velocityX;
         this.otherDirection = true;
         // this.walking_sound.play();
@@ -161,7 +167,7 @@ class Character extends MovableObject {
 
     jump() {
         if ((this.world.keyboard.UP && this.isOnGround() && !this.jumping && !this.isDead()) || this.enemieHit) {
-            this.velocityY = -4;
+            this.velocityY = -4;//-4
             this.enemieHit = false;
             this.jumping = true;
         }

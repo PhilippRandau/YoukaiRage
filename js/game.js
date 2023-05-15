@@ -1,19 +1,46 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let audio = false;
+
+let button_Sound = new Audio('audio/light-switch-turn-on-sound-47350.mp3');
+
 function init() {
-    canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-    console.log('My Character is', world.character);
     mobileInteractions();
 }
 
+function play() {
+    generateNewWorld();
+    
+}
+
+function generateNewWorld() {
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard);
+    console.log('My Character is', world.character);
+    document.getElementById('introScreen').classList.add('d-none');
+    document.getElementById('menu').classList.add('d-none');
+    document.getElementById('canvas').classList.remove('d-none');
+}
+
+function reloadWorld() {
+    world.gameStarted = false;
+    world.reset();
+    document.getElementById('outroScreen').classList.add('d-none');
+    document.getElementById('introScreen').classList.remove('d-none');
+    document.getElementById('muteButton').classList.remove('d-none');
+}
+
 function toggleSound() {
-    world.audio = !world.audio;
-    if (world.audio) {
+    audio = !audio;
+    if (audio) {
         document.getElementById('toggleSoundImg').src = 'img/09_GUI/volume-up-4-32.png';
+        button_Sound.currentTime = 0
+        button_Sound.play();
     } else {
         document.getElementById('toggleSoundImg').src = 'img/09_GUI/mute-3-32.png';
+        button_Sound.currentTime = 0
+        button_Sound.play();
     }
 }
 
@@ -83,7 +110,7 @@ document.addEventListener("keyup", (event) => {
 
 });
 
-function mobileInteractions(){
+function mobileInteractions() {
 
     document.getElementById('moveLeft').addEventListener("touchstart", (event) => {
         event.preventDefault();

@@ -10,8 +10,8 @@ class MechWorker extends Enemies {
         height: 70,
     }
 
-    velocityRunX = 0.8;
-    velocityWalkX = 0.4;
+    velocityRunX = 2.2;
+    velocityWalkX = 1.3;
 
     idle_images = 'img/04_enemies/MechWorker/Special.png';
     attack_images = 'img/04_enemies/MechWorker/Attack2.png';

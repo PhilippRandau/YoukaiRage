@@ -33,10 +33,10 @@ class Enemies extends MovableObject {
     idleRangeX = 15;
     soundRangeX = 400;
 
-    bufferAttackImages = 10;
-    bufferWalkImages = 15;
-    bufferIdleImages = 15;
-    bufferHurtImages = 20;
+    bufferAttackImages = 5;
+    bufferWalkImages = 7;
+    bufferIdleImages = 7;
+    bufferHurtImages = 10;
 
     amountDeathImages = 16;
 
@@ -107,8 +107,7 @@ class Enemies extends MovableObject {
 
     animationDead() {
         if (this.isDead()) {
-            // this.pauseSounds();
-            this.playAnimation(this.GHOST_IMAGES, 8);
+            this.playAnimation(this.GHOST_IMAGES, 2);
             this.frameRate = 1;
             this.offsetCenterIMG = -30;
             if (this.currentImage > this.amountDeathImages) {

@@ -22,7 +22,14 @@ h1 {
   text-shadow: 4px 4px 8px rgba(255, 255, 255, 0.4);
 }
 
-h2 {}
+h2 {
+  margin-block-start: unset;
+  margin-block-end: 10px;
+  color: white;
+  font-weight: 500;
+  -webkit-text-stroke: 0.5px black;
+  font-size: 40px;
+}
 
 canvas {
   background-color: black;
@@ -91,20 +98,23 @@ canvas {
 
 
 .outro-screen {
-  margin-top: -480px;
   width: 720px;
   height: 480px;
   background-image: url('img/09_GUI/Background.png');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-
+.score{
+  -webkit-text-stroke: 2px #38002C;
+  -webkit-text-fill-color: yellow;
+  font-size:100px;
+}
 
 .menu {
   display: flex;
@@ -162,30 +172,58 @@ canvas {
   justify-content: space-between;
   width: 90px;
   margin: 0px 20px;
+  /* background-color: #4B1D52; */
+  /* padding: 5px;
+  border-radius: 10px; */
 }
 
-.info {
+.info-controls {
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 20px;
   background-color: #38002C;
-  border-radius: 20px;
-  /* width: 100%; */
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  text-align: center;
+  max-width: 680px;
+  width: calc(100% - 40px);
 }
 
+.controls {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
 
-.info span {
-  /* color: #38002C; */
+.controls span {
   font-size: 32px;
   font-weight: 500;
-  /* letter-spacing: 10px; */
-  /* margin-block-start: 50px;
-  margin-block-end: 50px; */
-
-
-  -webkit-text-stroke: 0.2px #38002C;
+  -webkit-text-stroke: 0.7px black;
   -webkit-text-fill-color: white;
-  /* text-shadow: 4px 4px 8px rgba(255, 255, 255, 0.4); */
+}
+
+.controls-hide {
+  background-color: #38002C;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 20px;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "PixelGothic", Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 100;
+  -webkit-text-stroke: 0.5px black;
+  -webkit-text-fill-color: white;
+  word-spacing: 5px;
+  letter-spacing: 2px;
+}
+
+.controls-hide:hover {
+ cursor: pointer;
+ background-color: #44183b !important;
 }
 
 .gui-movement img {
@@ -230,11 +268,11 @@ canvas {
     width: 100%;
   }
 
-  .title-text{
+  .title-text {
     width: 440px;
   }
 
-  h1{
+  h1 {
     font-size: 80px;
   }
 
@@ -273,7 +311,7 @@ canvas {
     margin-top: -101vh;
   } */
 
-  
+
 
   .header {
     display: none;

@@ -30,7 +30,6 @@ class DrawableObject {
             img.src = path;
             this.imageCache[path] = img;
         });
-
     }
 
     switchSprite(img, frameRate, frameBuffer) {

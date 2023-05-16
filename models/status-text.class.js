@@ -18,7 +18,6 @@ class StatusText extends DrawableObject {
     }
 
     drawText(ctx) {
-        
         ctx.fillStyle = this.textColor;
         switch (this.text) {
             case 'Boss Health':

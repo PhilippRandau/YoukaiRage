@@ -69,9 +69,9 @@ class World {
         }
 
 
-        this.collectibles.splice(0,this.collectibles.length);
-        this.enemies.splice(0,this.enemies.length);
-        this.collisionBlocks.splice(0,this.collisionBlocks.length);
+        this.collectibles.splice(0, this.collectibles.length);
+        this.enemies.splice(0, this.enemies.length);
+        this.collisionBlocks.splice(0, this.collisionBlocks.length);
 
 
         this.camera_x = 506.01;
@@ -324,9 +324,11 @@ class World {
         this.level.enemies.forEach(enemy => {
             enemy.update();
             if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && !this.character.isJumping() && !this.character.isDead() && this.character.isFalling() && enemy.energy > 0) {
-                this.character.enemieHit = true;
-                enemy.hit();
-                this.character.lastHitTime = Date.now();
+                if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
+                    this.character.enemieHit = true;
+                    enemy.hit();
+                    this.character.lastHitTime = Date.now();
+                }
             } else if (this.character.isCollidingHitbox(this.character.hitbox, enemy.hitbox) && this.character.energy > 0 && enemy.energy > 0) {
                 if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
                     this.character.hit();

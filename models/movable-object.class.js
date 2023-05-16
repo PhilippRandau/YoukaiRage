@@ -21,7 +21,20 @@ class MovableObject extends DrawableObject {
         height: 0,
     }
 
+    showGameOverScreen() {
+        setTimeout(() => {
+            this.pauseSounds();
+            this.backgroundSoundsPause();
+            document.getElementById('outroScreen').classList.remove('d-none');
+            document.getElementById('canvas').classList.add('d-none');
+            document.getElementById('endScore').innerHTML = `Score: ${this.world.character.points}`
+        }, 1000);
+    }
 
+    backgroundSoundsPause() {
+        this.world.background_Sound_Outside.pause();
+        this.world.background_Sound_EnemyBase.pause();
+    }
 
     applyGravity() {
         this.y += this.velocityY;
@@ -48,15 +61,6 @@ class MovableObject extends DrawableObject {
     }
 
 
-
-
-    // playAnimation(images) {
-    //     let i = this.currentImage % images.length;
-    //     let path = images[i];
-    //     this.img = this.imageCache[path];
-    //     this.currentImage++;
-    // }
-
     playAnimation(images, framesPerImage) {
         if (!this.animationCounter || this.animationCounter >= framesPerImage) {
             this.animationCounter = 0;
@@ -66,7 +70,6 @@ class MovableObject extends DrawableObject {
         }
         this.animationCounter++;
     }
-
 
 
     isCollidingHitbox(object1, object2) {
@@ -142,19 +145,24 @@ class MovableObject extends DrawableObject {
         this.hitbox.width = this.offset.width;
         this.hitbox.height = this.offset.height;
 
-
         if (this instanceof Endboss) {
-            if (!this.otherDirection) {
-                this.hitboxAttack.x = this.hitbox.x + this.hitbox.width;
-            } else {
-                this.hitboxAttack.x = this.x + this.offsetAttack.x;
-            }
-            this.hitboxAttack.y = this.y + this.offsetAttack.y;
-            this.hitboxAttack.width = this.offsetAttack.width;
-            this.hitboxAttack.height = this.offsetAttack.height;
-
+            this.endbossIsShooting();
         }
     }
+
+    endbossIsShooting() {
+
+        if (!this.otherDirection) {
+            this.hitboxAttack.x = this.hitbox.x + this.hitbox.width;
+        } else {
+            this.hitboxAttack.x = this.x + this.offsetAttack.x;
+        }
+        this.hitboxAttack.y = this.y + this.offsetAttack.y;
+        this.hitboxAttack.width = this.offsetAttack.width;
+        this.hitboxAttack.height = this.offsetAttack.height;
+
+    }
+
 
 
 }

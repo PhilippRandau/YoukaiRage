@@ -1,5 +1,4 @@
 class Enemies extends MovableObject {
-
     intervalAnimation;
     startAnimations = false;
     GHOST_IMAGES = [
@@ -107,7 +106,7 @@ class Enemies extends MovableObject {
 
     animationDead() {
         if (this.isDead()) {
-            this.playAnimation(this.GHOST_IMAGES, 2);
+            this.playAnimation(this.GHOST_IMAGES, 3);
             this.frameRate = 1;
             this.offsetCenterIMG = -30;
             if (this.currentImage > this.amountDeathImages) {

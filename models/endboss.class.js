@@ -43,14 +43,16 @@ class Endboss extends Enemies {
     attack_images = 'img/04_enemies/Endboss/Attack1.png';
     walk_images = 'img/04_enemies/Endboss/Walk.png';
     hurt_images = 'img/04_enemies/Endboss/Hurt.png';
+    death_images = 'img/04_enemies/Endboss/Death.png'
 
     amountIdleImages = 4;
     amountAttackImages = 4;
     amountWalkImages = 4;
     amountHurtImages = 2;
-    amountDeathImages = 4;
+    amountDeathImages = 6;
 
     bufferAttackImages = 15;
+    bufferDeathImages = 15;
 
     walking_sound = new Audio('audio/enemies/endboss/walk_range.mp3');
     // running_sound = new Audio('audio/enemies/walk_run/run.mp3');
@@ -61,8 +63,6 @@ class Endboss extends Enemies {
 
     constructor(enemieID, x, y, otherDirection) {
         super().switchSprite(this.idle_images, this.amountIdleImages, this.bufferIdleImages);
-
-        this.loadImages(this.GHOST_IMAGES);
 
         this.enemieID = enemieID;
         this.x = x;
@@ -77,8 +77,7 @@ class Endboss extends Enemies {
 
 
     walk() {
-        if (!this.isDead()) {
-            
+        if (!this.isDead() && !this.Dead) {
             if (this.isHurt()) {
                 this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
                 this.isAttacking = false;
@@ -100,10 +99,10 @@ class Endboss extends Enemies {
                 this.isAttacking = false;
                 this.walking_sound.currentTime = 0;
                 this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
-            }else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)){
+            } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
                 this.enemyIdle();
                 this.walking_sound.currentTime = 0;
-                
+
             } else {
                 this.isAttacking = false;
                 this.enemyIdle();
@@ -112,10 +111,21 @@ class Endboss extends Enemies {
             if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
                 this.playSound(this.walking_sound);
             }
-        }else{
+        } else {
             this.playSound(this.death_sound);
             this.animationDead();
         }
+
+    }
+
+    animationDead() {
+        if (this.isDead()) {
+            this.switchSprite(this.death_images, this.amountDeathImages, this.bufferDeathImages);
+            this.offset.y = 54;
+            this.showGameOverScreen();
+            this.Dead = true;
+        }
+
 
     }
 

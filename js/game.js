@@ -11,16 +11,16 @@ function init() {
 
 function play() {
     generateNewWorld();
-    
+    buttonSoundPlay()
 }
 
 function generateNewWorld() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    console.log('My Character is', world.character);
     document.getElementById('introScreen').classList.add('d-none');
     document.getElementById('menu').classList.add('d-none');
     document.getElementById('canvas').classList.remove('d-none');
+    
 }
 
 function reloadWorld() {
@@ -28,20 +28,30 @@ function reloadWorld() {
     world.reset();
     document.getElementById('outroScreen').classList.add('d-none');
     document.getElementById('introScreen').classList.remove('d-none');
-    document.getElementById('muteButton').classList.remove('d-none');
+    document.getElementById('menu').classList.remove('d-none');
 }
 
 function toggleSound() {
     audio = !audio;
     if (audio) {
         document.getElementById('toggleSoundImg').src = 'img/09_GUI/volume-up-4-32.png';
-        button_Sound.currentTime = 0
-        button_Sound.play();
+        buttonSoundPlay();
     } else {
         document.getElementById('toggleSoundImg').src = 'img/09_GUI/mute-3-32.png';
+    }
+}
+
+function buttonSoundPlay(){
+    if (audio) {
         button_Sound.currentTime = 0
         button_Sound.play();
     }
+}
+
+function hideControlsInfo(){
+    document.getElementById('infoControls').classList.add('d-none');
+    buttonSoundPlay();
+    
 }
 
 document.addEventListener("keydown", (event) => {

@@ -49,7 +49,7 @@ class Character extends MovableObject {
             this.interactions();
             this.animate();
             this.resetJumpSound();
-            
+
         }
         if (this.characterInteraction != this.previousCharacterInteraction) {
             this.playSound(this.scream_ghost);
@@ -77,7 +77,8 @@ class Character extends MovableObject {
         if (this.isDead()) {
             this.switchSprite('img/03_character_youkai/Dead.png', 4, 7);
             this.playSound(this.dying_sound);
-            document.getElementById('outroScreen').classList.remove('d-none');
+            this.showGameOverScreen();
+            this.world.gameStarted = false;
         } else if (this.isHurt()) {
             // this.playSound(this.hurt_sound);
             this.switchSprite('img/03_character_youkai/Hurt.png', 3, 7);
@@ -101,15 +102,11 @@ class Character extends MovableObject {
     }
 
     pauseSounds() {
-        // this.walking_sound.pause();
-        // this.running_sound.pause();
-        // this.idle_sound.pause();
         this.dying_sound.pause();
         this.hurt_sound.pause();
         this.hurt_sound.currentTime = 0;
         this.jump_sound.pause();
         this.jump_sound.currentTime = 0;
-
     }
 
     isBored() {
@@ -148,7 +145,7 @@ class Character extends MovableObject {
         } catch (error) {
             debugger;
         }
-        
+
     }
 
     walkRight() {

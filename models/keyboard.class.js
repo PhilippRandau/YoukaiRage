@@ -1,14 +1,8 @@
 class Keyboard {
-   LEFT = false;
-   RIGHT = false;
-   DOWN = false;
-   UP = false;
-   CHARGE = false;
-    
-    constructor() {
-        
+    LEFT = false;
+    RIGHT = false;
+    DOWN = false;
+    UP = false;
+    CHARGE = false;
 
-
-    }
-   
 }

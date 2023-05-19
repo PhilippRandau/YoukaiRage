@@ -1,14 +1,12 @@
 const level1 = new Level(
     [
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', -719, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 0, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/stars.png', 0, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Bright/star.png', 0, 0),
-        // new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks2_half.png', 200, 220),
-        // new BackgroundObject('img/01_backgrounds/original_size/PNG/Space1/Bright/rocks3_half.png', 200, 220),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719 * 2, 0),
-        new BackgroundObject('img/01_backgrounds/original_size/PNG/Space2/Pale/background.png', 719 * 3, 0),
+        new BackgroundObject('img/01_backgrounds/background.png', -719, 0),
+        new BackgroundObject('img/01_backgrounds/background.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/stars.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/star.png', 0, 0),
+        new BackgroundObject('img/01_backgrounds/background.png', 719, 0),
+        new BackgroundObject('img/01_backgrounds/background.png', 719 * 2, 0),
+        new BackgroundObject('img/01_backgrounds/background.png', 719 * 3, 0),
     ],
     [
         new Worker(0, -538, 250, false),
@@ -32,15 +30,15 @@ const level1 = new Level(
         new Endboss(18, 6800, 250, true),//6800
     ],
     [
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', -719),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 0),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719 * 2),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 3),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones2.png', 719 * 4),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 5),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 6),
-        new Asteroids('img/01_backgrounds/original_size/PNG/Space2/Pale/stones1.png', 719 * 7),
+        new Asteroids('img/01_backgrounds/stones1.png', -719),
+        new Asteroids('img/01_backgrounds/stones2.png', 0),
+        new Asteroids('img/01_backgrounds/stones1.png', 719),
+        new Asteroids('img/01_backgrounds/stones2.png', 719 * 2),
+        new Asteroids('img/01_backgrounds/stones1.png', 719 * 3),
+        new Asteroids('img/01_backgrounds/stones2.png', 719 * 4),
+        new Asteroids('img/01_backgrounds/stones1.png', 719 * 5),
+        new Asteroids('img/01_backgrounds/stones1.png', 719 * 6),
+        new Asteroids('img/01_backgrounds/stones1.png', 719 * 7),
 
     ],
     [

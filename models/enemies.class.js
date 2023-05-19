@@ -39,6 +39,10 @@ class Enemies extends MovableObject {
 
     amountDeathImages = 16;
 
+
+    /**
+    * Updates the enemy's state and performs the corresponding actions based on the character's position and other conditions.
+    */
     update() {
         if (this.startAnimations) {
             this.walk();
@@ -46,6 +50,9 @@ class Enemies extends MovableObject {
     }
 
 
+    /**
+     * Controls the enemy's movement and actions based on the character's position and other conditions.
+     */
     walk() {
         if (!this.isDead()) {
             if (this.isHurt() && (this instanceof MechWorker || this instanceof Dumper)) {
@@ -64,7 +71,6 @@ class Enemies extends MovableObject {
             } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
                 this.enemyIdle();
                 this.playSound(this.idle_sound);
-
             } else {
                 this.enemyIdle();
                 this.pauseSounds();
@@ -77,13 +83,24 @@ class Enemies extends MovableObject {
     }
 
 
+    /**
+     * Sets the enemy's sprite and animation to idle state.
+     */
     enemyIdle() {
         this.switchSprite(this.idle_images, this.amountIdleImages, this.bufferIdleImages);
         this.pauseSounds();
     }
 
 
-
+    /**
+     * Moves the enemy and plays the corresponding animation and sound.
+     * @param {boolean} otherDirection - Whether the enemy is moving in the opposite direction.
+     * @param {number} velocityX - The velocity at which the enemy moves.
+     * @param {array} images - The images to be used for the animation.
+     * @param {number} amountImages - The total number of images in the animation.
+     * @param {number} bufferImages - The buffer for frame rate control.
+     * @param {Audio} sound - The sound to be played.
+     */
     enemyMove(otherDirection, velocityX, images, amountImages, bufferImages, sound) {
         otherDirection ? this.velocityX = -velocityX : this.velocityX = velocityX;
         this.otherDirection = otherDirection;
@@ -94,6 +111,9 @@ class Enemies extends MovableObject {
     }
 
 
+    /**
+     * Pauses the sounds of the enemy.
+     */
     pauseSounds() {
         this.walking_sound.pause();
         this.running_sound.pause();
@@ -101,9 +121,9 @@ class Enemies extends MovableObject {
     }
 
 
-
-
-
+    /**
+     * Handles the animation and actions when the enemy is dead.
+     */
     animationDead() {
         if (this.isDead()) {
             this.playAnimation(this.GHOST_IMAGES, 3);
@@ -118,11 +138,21 @@ class Enemies extends MovableObject {
     }
 
 
+    /**
+     * Checks if the character's position is within the specified action range to the left of the enemy.
+     * @param {number} actionRangeX - The range in which the action occurs.
+     * @returns {boolean} - True if the character is within the action range to the left, false otherwise.
+     */
     inRangeXLeft(actionRangeX) {
         return this.world.character.x > this.x - actionRangeX && this.world.character.x < this.x;
     }
 
 
+    /**
+     * Checks if the character's position is within the specified action range to the right of the enemy.
+     * @param {number} actionRangeX - The range in which the action occurs.
+     * @returns {boolean} - True if the character is within the action range to the right, false otherwise.
+     */
     inRangeXRight(actionRangeX) {
         return this.world.character.x > this.x && this.world.character.x < this.x + actionRangeX;
     }

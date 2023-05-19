@@ -8,12 +8,15 @@ class Collectible extends DrawableObject {
 
     collecting_sound = new Audio('audio/collecting/collecting.mp3')
 
+
+    /**
+    * Handles the collection of a collectible object.
+    */
     collect() {
         this.world.character.addPoints(20)
         if (audio) {
             this.collecting_sound.play();
         }
-
         delete this.world.collectibles[this.collectibleID];
     }
 }

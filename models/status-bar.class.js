@@ -16,6 +16,10 @@ class StatusBar extends DrawableObject {
     }
 
 
+    /**
+    * Adjusts the cropbox based on the percentage filled and returns the updated cropbox object.
+    * @returns {object} The adjusted cropbox object with x, y, width, and height properties.
+    */
     adjustCropbox() {
         return {
             x: 0,
@@ -25,6 +29,11 @@ class StatusBar extends DrawableObject {
         }
     }
 
+
+    /**
+    * Draws the status bar on the canvas.
+    * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+    */
     draw(ctx) {
         let cropbox;
         if (this.formImg === 'adjustable') {
@@ -47,6 +56,11 @@ class StatusBar extends DrawableObject {
         this.updateFrames();
     }
 
+
+    /**
+    * Calculates the width of the cropbox based on the percentage filled.
+    * @returns {number} The width of the cropbox.
+    */
     statusBarFillCropbox() {
         if (this.formImg === 'adjustable') {
             return this.img.width / 100 * this.percentage;
@@ -55,6 +69,11 @@ class StatusBar extends DrawableObject {
         }
     }
 
+
+    /**
+    * Calculates the width of the status bar image based on the percentage filled.
+    * @returns {number} The width of the status bar image.
+    */
     statusBarFillIMG() {
         if (this.formImg === 'adjustable') {
             return this.width / 100 * this.percentage;
@@ -63,8 +82,12 @@ class StatusBar extends DrawableObject {
         }
     }
 
-    setPercentage(percentage) {
 
+    /**
+    * Sets the percentage filled and updates the status bar image accordingly.
+    * @param {number} percentage - The percentage filled.
+    */
+    setPercentage(percentage) {
         this.percentage = percentage;
         let path;
         if (this.formImg === 'adjustable') {
@@ -74,6 +97,12 @@ class StatusBar extends DrawableObject {
         }
         this.img = this.imageCache[path];
     }
+
+
+    /**
+     * Resolves the image index based on the percentage filled.
+     * @returns {number} The index of the image to use.
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

@@ -14,7 +14,7 @@ class Endboss extends Enemies {
         x: 47,
         y: 32,
         width: 50,
-        height: 90,
+        height: 110,
     }
 
     hitboxAttack = {
@@ -55,7 +55,6 @@ class Endboss extends Enemies {
     bufferDeathImages = 15;
 
     walking_sound = new Audio('audio/enemies/endboss/walk_range.mp3');
-    // running_sound = new Audio('audio/enemies/walk_run/run.mp3');
     idle_sound = new Audio('audio/enemies/endboss/idle_sounds.mp3');
     running_sound = new Audio('audio/enemies/endboss/laser-zap-90575.mp3');
     hurt_sound = new Audio('audio/enemies/endboss/hurt.mp3');
@@ -75,16 +74,23 @@ class Endboss extends Enemies {
     }
 
 
-
+    /**
+     * Controls the character's behavior while walking.
+     * If the character is not dead, the corresponding behavior is executed based on its state and range.
+     * If the character is hurt, the corresponding sprite and behavior are used.
+     * If the character is within attack range, the attack behavior is triggered.
+     * If the character is within walking range, the walking behavior is triggered.
+     * If the character is within sound range, the idle behavior is triggered.
+     * Otherwise, the character defaults to the idle behavior.
+     * The function also checks if the character is within audible range.
+     */
     walk() {
         if (!this.isDead() && !this.Dead) {
+            this.isAttacking = false;
             if (this.isHurt()) {
                 this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
-                this.isAttacking = false;
             } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
-                this.isAttacking = false;
                 this.enemyIdle();
-                // this.playSound(this.idle_sound);
             } else if (this.inRangeXRight(this.attackRangeX)) {
                 this.isAttacking = true;
                 this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
@@ -92,42 +98,44 @@ class Endboss extends Enemies {
                 this.isAttacking = true;
                 this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
             } else if (this.inRangeXRight(this.walkRangeX)) {
-                this.isAttacking = false;
                 this.walking_sound.currentTime = 0;
                 this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else if (this.inRangeXLeft(this.walkRangeX)) {
-                this.isAttacking = false;
                 this.walking_sound.currentTime = 0;
                 this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
                 this.enemyIdle();
                 this.walking_sound.currentTime = 0;
-
             } else {
-                this.isAttacking = false;
                 this.enemyIdle();
-                // this.pauseSounds();
             }
-            if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
-                this.playSound(this.walking_sound);
-            }
+            this.isInHearableRange();
         } else {
             this.playSound(this.death_sound);
             this.animationDead();
         }
-
     }
 
-    animationDead() {
-        if (this.isDead()) {
-            this.switchSprite(this.death_images, this.amountDeathImages, this.bufferDeathImages);
-            this.offset.y = 54;
-            this.showGameOverScreen();
-            this.Dead = true;
+    /**
+     * Checks if the character is within the audible range and plays the walking sound.
+     */
+    isInHearableRange() {
+        if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
+            this.playSound(this.walking_sound);
         }
-
-
     }
 
-
+    
+    /**
+    * Performs the death animation and updates the character's state.
+    */
+    animationDead() {
+        this.switchSprite(this.death_images, this.amountDeathImages, this.bufferDeathImages);
+        setTimeout(() => {
+            this.death_sound.pause();
+            delete this.world.level.enemies[this.enemieID];
+        }, 1000);
+        this.showGameOverScreen();
+        this.Dead = true;
+    }
 }

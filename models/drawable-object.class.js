@@ -11,6 +11,12 @@ class DrawableObject {
     elapsedFrames = 0;
     offsetCenterIMG = 0;
     world;
+
+
+    /**
+     * Loads an image from the given path and sets the width and height based on the image dimensions.
+     * @param {string} path - The path of the image.
+     */
     loadImage(path) {
         this.img = new Image();
         this.img.onload = () => {
@@ -20,9 +26,10 @@ class DrawableObject {
         this.img.src = path;
     }
 
+
     /**
-     * 
-     * @param {Array} arr - 
+     * Loads multiple images from an array of paths and caches them.
+     * @param {string[]} arr - An array of image paths.
      */
     loadImages(arr) {
         arr.forEach((path) => {
@@ -32,6 +39,13 @@ class DrawableObject {
         });
     }
 
+
+    /**
+    * Switches the sprite image, frame rate, and frame buffer.
+    * @param {string} img - The path of the new sprite image.
+    * @param {number} frameRate - The frame rate of the sprite animation.
+    * @param {number} frameBuffer - The number of frames to buffer before switching.
+    */
     switchSprite(img, frameRate, frameBuffer) {
         if (img !== this.previousImg) {
             this.currentFrame = 0;
@@ -43,6 +57,10 @@ class DrawableObject {
     }
 
 
+    /**
+    * Returns the crop box coordinates for the current frame of the sprite.
+    * @returns {Object} The crop box coordinates.
+    */
     cropbox() {
         return {
             x: this.currentFrame * this.img.width / this.frameRate,
@@ -53,6 +71,10 @@ class DrawableObject {
     }
 
 
+    /**
+    * Draws the sprite on the canvas context.
+    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+    */
     draw(ctx) {
         const cropbox = this.cropbox();
         ctx.drawImage(
@@ -69,6 +91,10 @@ class DrawableObject {
         this.updateFrames();
     }
 
+
+    /**
+    * Updates the current frame of the sprite based on the frame buffer and frame rate.
+    */
     updateFrames() {
         this.elapsedFrames++;
         if (this.elapsedFrames % this.frameBuffer === 0) {
@@ -81,6 +107,10 @@ class DrawableObject {
     }
 
 
+    /**
+    * Draws the frame of the sprite on the canvas context.
+    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+    */
     drawFrame(ctx) {
         if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper || this instanceof ThrowableObject) {
             ctx.beginPath();
@@ -100,6 +130,11 @@ class DrawableObject {
         }
     }
 
+
+    /**
+    * Draws the hitbox of the sprite on the canvas context.
+    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+    */
     drawFrameHitbox(ctx) {
         if (this instanceof Character || this instanceof MechWorker || this instanceof Worker || this instanceof Endboss || this instanceof Dumper || this instanceof ThrowableObject) {
             ctx.beginPath();
@@ -118,13 +153,17 @@ class DrawableObject {
         }
     }
 
+
+    /**
+    * Checks if the sprite is colliding with another sprite.
+     * @param {Object} mo - The other sprite to check collision with.
+    * @returns {boolean} True if collision occurs, false otherwise.
+    */
     isColliding(mo) {
         return this.y + this.height >= mo.y &&
             this.y <= mo.y + mo.height &&
             this.x <= mo.x + mo.width &&
             (this.x + this.width) >= mo.x;
     }
-
-
 }
 

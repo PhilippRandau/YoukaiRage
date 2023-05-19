@@ -13,6 +13,7 @@
     <script src="models/character.class.js"></script>
     <script src="models/enemies.class.js"></script>
     <script src="models/tile.class.js"></script>
+    
     <script src="models/collisionBlock.class.js"></script>
     <script src="models/collectible.class.js"></script>
     <script src="models/mechworker.class.js"></script>
@@ -23,6 +24,8 @@
     <script src="models/throwable-object.class.js"></script>
     <script src="models/status-bar.class.js"></script>
     <script src="models/status-text.class.js"></script>
+    <script src="models/collisionHandler.class.js"></script>
+    <script src="models/resetWorld.class.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/backgroundObject.class.js"></script>
     <script src="models/keyboard.class.js"></script>
@@ -36,6 +39,13 @@
 </head>
 
 <body onload="init()">
+    <div id="rotateMobile" class="rotate-mobile">
+        <span>Game: Youkai Rage</span>
+        <img src="img/09_GUI/rotate-2-32.png" alt="rotateMobile">
+        <span>Please rotate your screen to play.</span>
+        <img src="img/09_GUI/rotate-2-32.png" alt="rotateMobile">
+        <span>Game: Youkai Rage</span>
+    </div>
     <h1 class="header hide-mobile">Youkai Rage</h1>
     <div class="menu" id="menu">
         <button class="mute-button" onclick="toggleSound()"><img id="toggleSoundImg" src="img/09_GUI/mute-3-32.png"
@@ -43,8 +53,22 @@
 
     </div>
 
+    <div id="fullscreen" class="d-none">
+        <canvas id="canvas" width="720px" height="480px"></canvas>
 
-    <canvas class="d-none" id="canvas" width="720px" height="480px"></canvas>
+        <div class="gui-movement only-mobile">
+            <div class="movement">
+                <button id="moveLeft"><img class="move-left"  src="img/09_GUI/arrow.png" alt="arrow left"></button>
+                <button  id="moveRight"><img class="move-right" src="img/09_GUI/arrow.png" alt="arrow right"></button>
+            </div>
+            <button class="mute-button" onclick="toggleFullscreen()"><img src="img/09_GUI/fullscreen.png"
+                    alt=""></button>
+            <div class="movement">
+                <button class="move-jump" id="moveJump"><img src="img/09_GUI/arrow.png" alt="arrow up"></button>
+                <button class="shoot" id="shoot"><img src="img/09_GUI/shoot.png" alt="arrow shoot"></button>
+            </div>
+        </div>
+    </div>
 
     <div id="introScreen" class="intro-screen">
         <div class="title-text">
@@ -68,26 +92,18 @@
         </button>
     </div>
 
-    <div class="gui-movement only-mobile">
-        <div class="movement">
-            <button class="move-left" id="moveLeft"><img src="img/09_GUI/arrow.png" alt="arrow left"></button>
-            <button class="move-right" id="moveRight"><img src="img/09_GUI/arrow.png" alt="arrow right"></button>
-        </div>
-        <div class="movement">
-            <button class="move-jump" id="moveJump"><img src="img/09_GUI/arrow.png" alt="arrow up"></button>
-            <button class="shoot" id="shoot"><img src="img/09_GUI/shoot.png" alt="arrow shoot"></button>
-        </div>
-    </div>
+
 
     <div id="infoControls" class="info-controls">
         <div class="controls">
             <h2>Control's</h2>
-            <span>W / Arrow UP / Space = Jump</span>
-            <span>A / Arrow UP = Walk Left</span>
-            <span>D / Arrow Right = Walk Right</span>
-            <span>E = Shoot</span>
+            <span>W / <img class="move-jump" src="img/09_GUI/arrow.png" alt="arrow up"> / Space = Jump</span>
+            <span>A / <img class="move-left" src="img/09_GUI/arrow.png" alt="arrow left"> = Walk Left</span>
+            <span>D / <img class="move-right" src="img/09_GUI/arrow.png" alt="arrow right"> = Walk Right</span>
+            <span>E / <img class="shoot" src="img/09_GUI/shoot.png" alt="shoot"> = Shoot</span>
+            <span>Hint: Only the Enboss get's hit by Youkai's charge.</span>
         </div>
-        <button onclick="hideControlsInfo()"  class="controls-hide">I got it.</button>
+        <button onclick="hideControlsInfo()" class="controls-hide">I get it.</button>
     </div>
 </body>
 

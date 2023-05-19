@@ -17,6 +17,11 @@ class StatusText extends DrawableObject {
 
     }
 
+
+    /**
+    * Draws the text on the canvas.
+    * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+    */
     drawText(ctx) {
         ctx.fillStyle = this.textColor;
         switch (this.text) {
@@ -42,6 +47,11 @@ class StatusText extends DrawableObject {
 
     }
 
+
+    /**
+    * Sets the percentage value.
+    * @param {number} percentage - The percentage value.
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
     }

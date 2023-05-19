@@ -98,14 +98,14 @@ class Endboss extends Enemies {
                 this.isAttacking = true;
                 this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
             } else if (this.inRangeXRight(this.walkRangeX)) {
-                this.walking_sound.currentTime = 0;
+                this.resetSound();
                 this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else if (this.inRangeXLeft(this.walkRangeX)) {
-                this.walking_sound.currentTime = 0;
+                this.resetSound();
                 this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
             } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
                 this.enemyIdle();
-                this.walking_sound.currentTime = 0;
+                this.resetSound();
             } else {
                 this.enemyIdle();
             }
@@ -114,6 +114,14 @@ class Endboss extends Enemies {
             this.playSound(this.death_sound);
             this.animationDead();
         }
+    }
+
+
+    /**
+     * Reset's the walking sound.
+     */
+    resetSound() {
+        this.walking_sound.currentTime = 0;
     }
 
     /**
@@ -125,7 +133,7 @@ class Endboss extends Enemies {
         }
     }
 
-    
+
     /**
     * Performs the death animation and updates the character's state.
     */

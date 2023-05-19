@@ -167,22 +167,31 @@ class Character extends MovableObject {
             this.world.gameStarted = false;
         } else if (this.isHurt()) {
             this.switchSprite('img/03_character_youkai/Hurt.png', 3, 7);
-            this.lastCall = new Date().getTime();
+            this.getTimeLastCall();
         } else if (this.world.keyboard.CHARGE && this.charges > 0) {
             this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 7);
-            this.lastCall = new Date().getTime();
+            this.getTimeLastCall();
         } else if (this.isFalling() || this.jumping) {
             this.playSound(this.jump_sound);
             this.switchSprite('img/03_character_youkai/Scream.png', 4, 7);
-            this.lastCall = new Date().getTime();
+            this.getTimeLastCall();
         } else if (this.isWalking() && (!this.jumping && !this.isFalling())) {
             this.switchSprite('img/03_character_youkai/Walk.png', 5, 7);
-            this.lastCall = new Date().getTime();
+            this.getTimeLastCall();
         } else if (this.isBored()) {
             this.switchSprite('img/03_character_youkai/Idle.png', 5, 7);
         } else {
             this.pauseSounds()
         }
+    }
+
+
+    /**
+    * Gets the timestamp of the last method call.
+    * @returns {number} The timestamp of the last call in milliseconds.
+    */
+    getTimeLastCall(){
+        return this.lastCall = new Date().getTime();
     }
 
 

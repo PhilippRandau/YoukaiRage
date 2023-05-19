@@ -20,7 +20,7 @@ class ThrowableObject extends MovableObject {
         this.otherDirectionCharge = otherDirectionCharge;
         this.chargeMovement();
         this.locChargeStart(x, y);
-        // this.animate();
+        this.animate();
         this.startPositionX = this.x;
         this.yAnimationOffset = this.y - 25;
     }

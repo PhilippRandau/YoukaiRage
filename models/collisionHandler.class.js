@@ -83,7 +83,7 @@ class CollisionHandler {
     endbossCollisions() {
         if (this.enemies[18]) {
             let endboss = this.enemies[18];
-            if (endboss.isCollidingHitbox(endboss.hitboxAttack, this.character.hitbox) && this.character.energy > 0 && endboss.energy > 0 && endboss.isAttacking) {
+            if (endboss.isCollidingHitbox(endboss.hitboxAttack, this.character.hitbox) && !this.character.isDead() && endboss.isDead() && endboss.isAttacking) {
                 if (this.character.lastHitTime === undefined || this.isTimePassed(500)) {
                     this.character.hit();
                     this.character.lastHitTime = Date.now();
@@ -100,9 +100,10 @@ class CollisionHandler {
         this.throwableObjects.forEach((throwableObject) => {
             throwableObject.update();
             throwableObject.world = this;
-            if (this.enemies[18].isCollidingHitbox(this.enemies[18].hitbox, throwableObject.hitbox) && this.enemies[18].energy > 0 && !throwableObject.hit) {
+            if (this.enemies[18].isCollidingHitbox(this.enemies[18].hitbox, throwableObject.hitbox) && !this.enemies[18].isDead() && !throwableObject.hit) {
                 this.enemies[18].hit();
                 throwableObject.hit = true;
+                console.log(throwableObject.hit)
             }
 
         });

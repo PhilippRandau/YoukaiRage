@@ -245,7 +245,7 @@ class World {
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
-        // mo.drawFrameHitbox(this.ctx);
+        mo.drawFrameHitbox(this.ctx);
     }
 
 

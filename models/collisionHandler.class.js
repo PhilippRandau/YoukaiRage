@@ -103,9 +103,7 @@ class CollisionHandler {
             if (this.enemies[18].isCollidingHitbox(this.enemies[18].hitbox, throwableObject.hitbox) && !this.enemies[18].isDead() && !throwableObject.hit) {
                 this.enemies[18].hit();
                 throwableObject.hit = true;
-                console.log(throwableObject.hit)
             }
-
         });
     }
 
@@ -116,6 +114,9 @@ class CollisionHandler {
         this.collectibles.forEach((collectible) => {
             if (this.character.isCollidingHitbox(this.character.hitbox, collectible)) {
                 collectible.collect();
+                if (this.character.charges < 100) {
+                    this.character.changeChargePoints(5);
+                }
             }
         })
     }

@@ -213,8 +213,9 @@ canvas {
 
 .controls span {
   font-size: 32px;
-  font-weight: 500;
-  -webkit-text-stroke: 0.7px black;
+  font-weight: lighter;
+  /* -webkit-text-stroke: 1px white; */
+  letter-spacing: 3px;
   -webkit-text-fill-color: white;
 }
 
@@ -230,7 +231,7 @@ canvas {
   font-family: "PixelGothic", Arial, Helvetica, sans-serif;
   font-size: 24px;
   font-weight: 100;
-  -webkit-text-stroke: 0.5px black;
+  /* -webkit-text-stroke: 0.5px black; */
   -webkit-text-fill-color: white;
   word-spacing: 5px;
   letter-spacing: 2px;

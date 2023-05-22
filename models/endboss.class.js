@@ -87,33 +87,41 @@ class Endboss extends Enemies {
     walk() {
         if (!this.isDead() && !this.Dead) {
             this.isAttacking = false;
-            if (this.isHurt()) {
-                this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
-            } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
-                this.enemyIdle();
-            } else if (this.inRangeXRight(this.attackRangeX)) {
-                this.isAttacking = true;
-                this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
-            } else if (this.inRangeXLeft(this.attackRangeX)) {
-                this.isAttacking = true;
-                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
-            } else if (this.inRangeXRight(this.walkRangeX)) {
-                this.resetSound();
-                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
-            } else if (this.inRangeXLeft(this.walkRangeX)) {
-                this.resetSound();
-                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
-            } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
-                this.enemyIdle();
-                this.resetSound();
+            if (this.outOfRangeY() && !this.outOfMaxRangeY() && (this.inRangeXRight(this.attackRangeX) || this.inRangeXLeft(this.attackRangeX)) && !this.isHurt()) {
+                this.outRange();
             } else {
-                this.enemyIdle();
+                this.inRange();
             }
-            this.isInHearableRange();
         } else {
             this.playSound(this.death_sound);
             this.animationDead();
         }
+    }
+
+    inRange(){
+        if (this.isHurt()) {
+            this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
+        } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
+            this.enemyIdle();
+        } else if (this.inRangeXRight(this.attackRangeX)) {
+            this.isAttacking = true;
+            this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXLeft(this.attackRangeX)) {
+            this.isAttacking = true;
+            this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXRight(this.walkRangeX)) {
+            this.resetSound();
+            this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+        } else if (this.inRangeXLeft(this.walkRangeX)) {
+            this.resetSound();
+            this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+        } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
+            this.enemyIdle();
+            this.resetSound();
+        } else {
+            this.enemyIdle();
+        }
+        this.isInHearableRange();
     }
 
 

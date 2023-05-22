@@ -33,7 +33,7 @@ class World {
     ];
     statusText = [
         new StatusText(30, 35, 50, 50, 'Health', 100, 35, 100, 'lightgreen'),
-        new StatusText(30, 65, 640, 50, 'Charge', 100, 65, 100, 'red'),
+        new StatusText(30, 65, 640, 50, 'Charge', 100, 65, 20, 'red'),
         new StatusText(550, 45, 640, 50, 'Points', 640, 45, 0, 'yellow'),
         new StatusText(240, 52, 640, 50, 'Boss Health', 435, 52, 100, 'white'),
     ];
@@ -127,9 +127,6 @@ class World {
     }
 
 
-
-
-
     /**
     * Plays background effects based on character's position.
     */
@@ -145,7 +142,6 @@ class World {
             this.background_Sound_EnemyBase.pause();
         }
     }
-
 
 
     /**
@@ -245,7 +241,7 @@ class World {
         if (mo.otherDirection == true) {
             this.flipImageBack(mo);
         }
-        mo.drawFrameHitbox(this.ctx);
+        // mo.drawFrameHitbox(this.ctx);
     }
 
 

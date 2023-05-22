@@ -1,7 +1,8 @@
 class Character extends MovableObject {
+    // maxPoints = 1460;
     x = -462;
     y = 288;
-    charges = 100;
+    charges = 20;
     points = 0;
     velocityX = 0;
     offsetCenterIMG = 8;
@@ -31,7 +32,6 @@ class Character extends MovableObject {
         this.loadImages(this.GHOST_BOTTLE);
         this.introAnimation();
         this.switchCharacterForm();
-
     }
 
 
@@ -131,13 +131,17 @@ class Character extends MovableObject {
     * Handles the character's charging action and throws a throwable object.
     */
     charge() {
-        if (this.world.keyboard.CHARGE && this.charges > 0 && !this.isDead() && this.isTimePassed(200, this.lastCharge)) {
+        if (this.world.keyboard.CHARGE && this.charges >= 10 && !this.isDead() && this.isTimePassed(200, this.lastCharge)) {
             let charges = new ThrowableObject(this.x + 80, this.y + 70, this.otherDirection);
             this.world.throwableObjects.push(charges);
-            this.charges -= 20;
-            this.world.statusText[1].setPercentage(this.charges);
+            this.changeChargePoints(-10);
             this.lastCharge = new Date().getTime();
         }
+    }
+
+    changeChargePoints(amount){
+        this.charges += amount;
+        this.world.statusText[1].setPercentage(this.charges);
     }
 
 
@@ -168,7 +172,7 @@ class Character extends MovableObject {
         } else if (this.isHurt()) {
             this.switchSprite('img/03_character_youkai/Hurt.png', 3, 7);
             this.getTimeLastCall();
-        } else if (this.world.keyboard.CHARGE && this.charges > 0) {
+        } else if (this.world.keyboard.CHARGE) {
             this.switchSprite('img/03_character_youkai/Attack_3.png', 7, 7);
             this.getTimeLastCall();
         } else if (this.isFalling() || this.jumping) {

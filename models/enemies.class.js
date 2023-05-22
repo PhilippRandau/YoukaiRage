@@ -27,8 +27,8 @@ class Enemies extends MovableObject {
     idle_sound = new Audio('audio/enemies/dumper/attack.mp3');
     ghost_sound = new Audio('audio/enemies/ghost.mp3');
 
-    walkRangeX = 250;
-    attackRangeX = 150;
+    walkRangeX = 290;
+    attackRangeX = 190;
     idleRangeX = 15;
     soundRangeX = 400;
 
@@ -55,30 +55,54 @@ class Enemies extends MovableObject {
      */
     walk() {
         if (!this.isDead()) {
-            if (this.isHurt() && (this instanceof MechWorker || this instanceof Dumper)) {
-                this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
-            } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
-                this.enemyIdle();
-                this.playSound(this.idle_sound);
-            } else if (this.inRangeXRight(this.attackRangeX)) {
-                this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
-            } else if (this.inRangeXLeft(this.attackRangeX)) {
-                this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
-            } else if (this.inRangeXRight(this.walkRangeX)) {
-                this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
-            } else if (this.inRangeXLeft(this.walkRangeX)) {
-                this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
-            } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
-                this.enemyIdle();
-                this.playSound(this.idle_sound);
+            if (this.outOfRangeY() && !this.outOfMaxRangeY() && (this.inRangeXRight(this.attackRangeX) || this.inRangeXLeft(this.attackRangeX)) && !this.isHurt()) {
+                this.outRange();
             } else {
-                this.enemyIdle();
-                this.pauseSounds();
+                this.inRange();
             }
-
         } else {
             this.animationDead();
             this.playSound(this.ghost_sound);
+        }
+    }
+
+
+    /**
+    * Performs actions for the enemy when the character is out of range.
+    */
+    outRange() {
+        if (this.inRangeXLeft(this.attackRangeX - 20)) {
+            this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXRight(this.attackRangeX - 20)) {
+            this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXLeft(this.walkRangeX) || this.inRangeXRight(this.walkRangeX)) {
+            this.enemyIdle();
+        }
+    }
+
+
+    /**
+    * Performs actions for the enemy when the character is in range.
+    */
+    inRange() {
+        if (this.isHurt() && (this instanceof MechWorker || this instanceof Dumper)) {
+            this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
+        } else if (this.inRangeXRight(this.idleRangeX) || this.inRangeXLeft(this.idleRangeX)) {
+            this.enemyIdle();
+        } else if (this.inRangeXRight(this.attackRangeX)) {
+            this.enemyMove(false, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXLeft(this.attackRangeX)) {
+            this.enemyMove(true, this.velocityRunX, this.attack_images, this.amountAttackImages, this.bufferAttackImages, this.running_sound);
+        } else if (this.inRangeXRight(this.walkRangeX)) {
+            this.enemyMove(false, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+        } else if (this.inRangeXLeft(this.walkRangeX)) {
+            this.enemyMove(true, this.velocityWalkX, this.walk_images, this.amountWalkImages, this.bufferWalkImages, this.walking_sound);
+        } else if (this.inRangeXLeft(this.soundRangeX) || this.inRangeXRight(this.soundRangeX)) {
+            this.enemyIdle();
+            this.playSound(this.idle_sound);
+        } else {
+            this.enemyIdle();
+            this.pauseSounds();
         }
     }
 
@@ -158,4 +182,11 @@ class Enemies extends MovableObject {
     }
 
 
+    outOfRangeY() {
+        return this.world.character.hitbox.y < this.hitbox.y - this.hitbox.height * 1.3 || this.world.character.hitbox.y > this.hitbox.y + this.hitbox.height * 1.3;
+    }
+
+    outOfMaxRangeY() {
+        return this.world.character.hitbox.y < this.hitbox.y - this.hitbox.height * 3 || this.world.character.hitbox.y > this.hitbox.y + this.hitbox.height * 3;
+    }
 }

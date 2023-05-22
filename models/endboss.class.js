@@ -98,6 +98,9 @@ class Endboss extends Enemies {
         }
     }
 
+    /**
+    * Performs actions for the endboss when the character is in range.
+    */
     inRange(){
         if (this.isHurt()) {
             this.switchSprite(this.hurt_images, this.amountHurtImages, this.bufferHurtImages);
